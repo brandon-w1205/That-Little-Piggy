@@ -1,0 +1,48 @@
+body {
+    background-color: rgb(32,33,36);
+    color: whitesmoke;
+    margin: 0;
+    padding: 0;
+}
+
+#container {
+    text-align: center;
+    width: 1730px;
+    height: 900px; 
+    background-color: rgb(45, 45, 45);
+    margin: 0 auto;
+    padding: 1em;
+    display: grid;
+    grid-gap: 1em;
+    grid-template-rows: .07fr .86fr .07fr;
+    grid-template-columns: .25fr .5fr .25fr;
+    grid-template-areas: "gameHeader gameHeader gameHeader"
+                        "game game game"
+                        "playAgain playAgain instructions";
+}
+
+#gameHeader {
+    grid-area: gameHeader;
+}
+
+main {
+    grid-area: game;
+    background-color: rgb(0,154,23);
+}
+
+#playAgain {
+    grid-area: playAgain;
+
+}
+
+#instructions {
+    grid-area: instructions;
+}
+
+#gameHeader, #playAgain, #instructions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: blue;
+    color: white;
+}
