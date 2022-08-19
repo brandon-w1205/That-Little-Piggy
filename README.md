@@ -31,7 +31,14 @@ Play as the untold piggy from the Three Little Piggy story to fight the Big Bad 
 
 ## Stretch Goals
 
+* Dash mechanic
 * Add images to characters/attacks to match with the story
 * Create static animation for boss and character
 * Add a background scene
 * Smooth the animations to make it feel more responsive
+
+## Possible Roadblocks
+
+* Getting stuck on creating a good window for the game
+* Creating a fluid movement and jumping mechanic (gravity included)
+* Spacing out my time and not procrastinating
