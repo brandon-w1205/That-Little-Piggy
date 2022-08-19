@@ -15,7 +15,7 @@ function drawBox(x, y, width, height, color) {
 }
 
 // adds character constructor to create a character's hitbox
-class Character {
+class Box {
     constructor(x, y, width, height, color) {
         this.x = x;
         this.y = y;
@@ -31,13 +31,19 @@ class Character {
     }
 }
 
-let piggy = new Character(100, 100, 100, 100, "blue");
 
 
+let piggy = new Box(100, 100, 100, 100, "blue");
 
+let wolf = new Box(1523, 60, 114, 710, 'grey');
 
+let wolfWall = new Box(1441, 0, 1, 770, 'white');
 
+wolf.render();
 
+piggy.render();
+
+wolfWall.render();
 
 
 
@@ -45,7 +51,7 @@ let piggy = new Character(100, 100, 100, 100, "blue");
 
 // elements on page render when clicking into the screen to play, will add a button to prompt player later
 canvas.addEventListener('click', e => {
-    piggy.render()
+    console.log(e.offsetX, e.offsetY);
 })
 
 
