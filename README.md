@@ -3,9 +3,13 @@
 We've all heard the story of the three little piggies... But did you know there was a fourth piggy?
 Fight against the big bad wolf as the fourth little piggy and send him all the way home!
 
+## About Game
+
+Play as the untold piggy from the Three Little Piggy story to fight the Big Bad Wolf! Dodge his attacks through jumping and platforms while shooting down the Wolf. Watch out for the Wolf's three phases!
+
 ## Tech Used
-Javascript
-HTML/CSS - Canvas
+* Javascript
+* HTML/CSS - Canvas
 
 ## Wireframe
 
