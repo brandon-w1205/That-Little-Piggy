@@ -9,7 +9,7 @@ HTML/CSS - Canvas
 
 ## Wireframe
 
-![]https://i.imgur.com/27YEVHC.png
+![](https://i.imgur.com/27YEVHC.png)
 
 ## MVP Checklist
 
