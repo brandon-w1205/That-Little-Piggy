@@ -69,6 +69,7 @@ canvas.addEventListener('click', e => {
     console.log(piggy.y)
 })
 
+let jumpSpeed = 0;
 
 const gameRefreshInterval = setInterval(gameRefresh, 24)
 
@@ -91,19 +92,34 @@ function gameRefresh() {
 
     piggy.x += playerSpeed;
 
+    piggy.y -= jumpSpeed;
+    
+    
+    
+
 }
 
 
 document.onkeydown = keyDown;
 document.onkeyup = keyUp;
 
+function yes() {
+    jumpSpeed = 0;
+}
+
+
 function keyDown(e) {
     switch(e.key) {
         case('d'):
-            playerSpeed = 3 * (60/fps); //* (60/fps)
+            playerSpeed = 5 * (60/fps); //* (60/fps)
+            
             break;
         case('a'):
-            playerSpeed = -3 * (60/fps); //* (60/fps)
+            playerSpeed = -5 * (60/fps); //* (60/fps)
+            break;
+        case(' '):
+            jumpSpeed = 15 * (60/fps)
+            console.log(setInterval(yes, 150))
             break;
     }
 
@@ -117,6 +133,8 @@ function keyUp(e) {
         case('a'):
             playerSpeed = 0; //* (60/fps)
             break;
+        // case(' '):
+        //     jumpSpeed = 0;
+        //     break;
     }
 }
-
