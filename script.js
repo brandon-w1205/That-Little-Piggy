@@ -14,6 +14,8 @@ function drawBox(x, y, width, height, color) {
     ctx.fillRect(x, y, width, height)
 }
 
+let gravitySpeed = .09;
+
 // adds character constructor to create a character's hitbox
 class Box {
     constructor(x, y, width, height, color) {
@@ -23,11 +25,27 @@ class Box {
         this.height = height;
         this.color = color;
         this.alive = true;
+        this.velocity = {
+            x: 0,
+            y: .5
+        }
     }
 
     render() {
         ctx.fillStyle = this.color;
         ctx.fillRect(this.x, this.y, this.width, this.height);
+    }
+
+    update() {
+        this.render()
+        this.y += this.velocity.y;
+
+        if(this.y + this.height + this.velocity.y <= 715) {
+            this.velocity.y += gravitySpeed;
+        } else {
+            this.velocity.y = 0;
+        }
+        
     }
 }
 
@@ -48,14 +66,7 @@ let fps = 24
 
 
 
-let gravitySpeed = 4 * (60/fps)
 
-function gravity() {
-    if(piggy.y < 600 ) {
-        piggy.y += gravitySpeed;
-        // piggy.height += gravitySpeed;
-    }
-}
 
 
 
@@ -71,7 +82,7 @@ canvas.addEventListener('click', e => {
 
 let jumpSpeed = 0;
 
-const gameRefreshInterval = setInterval(gameRefresh, 24)
+const gameRefreshInterval = setInterval(gameRefresh, 1)
 
 let playerSpeed = 0;
 
@@ -82,13 +93,13 @@ function gameRefresh() {
     // renders the items in game
     wolf.render();
     
-    piggy.render();
+    // piggy.render();
 
     wolfWall.render();
 
     ground.render();
 
-    gravity();
+    piggy.update();
 
     piggy.x += playerSpeed;
 
@@ -103,22 +114,18 @@ function gameRefresh() {
 document.onkeydown = keyDown;
 document.onkeyup = keyUp;
 
-function yes() {
-    jumpSpeed = 0;
-}
-
 
 function keyDown(e) {
     switch(e.key) {
         case('d'):
-            playerSpeed = 5 * (60/fps); //* (60/fps)
+            playerSpeed = 3; //* (60/fps)
             
             break;
         case('a'):
-            playerSpeed = -5 * (60/fps); //* (60/fps)
+            playerSpeed = -3; //* (60/fps)
             break;
         case(' '):
-            jumpSpeed = 15 * (60/fps)
+            jumpSpeed = 13
             console.log(setInterval(yes, 150))
             break;
     }
