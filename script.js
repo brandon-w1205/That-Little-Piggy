@@ -24,17 +24,25 @@ class Box {
         this.width = width;
         this.height = height;
         this.color = color;
+    }
+
+    render() {
+        ctx.fillStyle = this.color;
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+    }
+
+    
+}
+
+class Player extends Box {
+    constructor(x, y, width, height, color) {
+        super(x, y, width, height, color)
         this.alive = true;
         this.velocity = {
             x: 0,
             y: 0
         }
         this.onPlatform = true;
-    }
-
-    render() {
-        ctx.fillStyle = this.color;
-        ctx.fillRect(this.x, this.y, this.width, this.height);
     }
 
     update() {
@@ -61,11 +69,24 @@ class Box {
     }
 }
 
+class Platform {
+    constructor() {
+        this.position = {
+            x: 0,
+            y: 0
+        }
+        this.width = 200
+        this.height = 20
+    }
 
+    render() {
+    }
 
-let piggy = new Box(100, 100, 100, 100, "blue");
+}
 
-let wolf = new Box(1616, 55, 114, 710, 'grey');
+let piggy = new Player(100, 100, 100, 100, "blue");
+
+let wolf = new Player (1616, 55, 114, 710, 'grey');
 
 let wolfWall = new Box(1570, 0, 1, 770, 'white');
 
@@ -116,9 +137,9 @@ function gameRefresh() {
 
     piggy.update();
 
-    if(keys.right.press) {
+    if(keys.right.press && piggy.x < 1465) {
         piggy.velocity.x = 3;
-    } else if (keys.left.press) {
+    } else if (keys.left.press && piggy.x > 0) {
         piggy.velocity.x = -3;
     } else {
         piggy.velocity.x = 0;
@@ -140,7 +161,7 @@ let keys = {
 addEventListener('keydown', (e) => {
     switch(e.key) {
         case('d'):
-            keys.right.press = true;
+            keys.right.press = true;         
             break;
         case('a'):
             keys.left.press = true;
