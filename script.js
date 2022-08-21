@@ -14,7 +14,7 @@ function drawBox(x, y, width, height, color) {
     ctx.fillRect(x, y, width, height)
 }
 
-let gravitySpeed = .09;
+let gravity = .09;
 
 // adds character constructor to create a character's hitbox
 class Box {
@@ -27,7 +27,7 @@ class Box {
         this.alive = true;
         this.velocity = {
             x: 0,
-            y: .5
+            y: 0.5
         }
     }
 
@@ -39,11 +39,16 @@ class Box {
     update() {
         this.render()
         this.y += this.velocity.y;
+        this.x += this.velocity.x;
 
         if(this.y + this.height + this.velocity.y <= 715) {
-            this.velocity.y += gravitySpeed;
+            this.velocity.y += gravity;
         } else {
             this.velocity.y = 0;
+        }
+
+        if(this.x <= 0) {
+            this.velocity.x = 0;
         }
         
     }
@@ -80,11 +85,14 @@ canvas.addEventListener('click', e => {
     console.log(piggy.y)
 })
 
-let jumpSpeed = 0;
 
-const gameRefreshInterval = setInterval(gameRefresh, 1)
 
-let playerSpeed = 0;
+
+
+
+
+
+
 
 function gameRefresh() {
     // clears the canvas
@@ -101,47 +109,51 @@ function gameRefresh() {
 
     piggy.update();
 
-    piggy.x += playerSpeed;
-
-    piggy.y -= jumpSpeed;
+    if(keys.right.press) {
+        piggy.velocity.x = 3;
+    } else if (keys.left.press) {
+        piggy.velocity.x = -3;
+    } else {
+        piggy.velocity.x = 0;
+    }
     
-    
-    
-
 }
 
+let keys = {
+    right: {
+        press: false
+    },
+    left: {
+        press: false
+    }
+}
 
-document.onkeydown = keyDown;
-document.onkeyup = keyUp;
-
-
-function keyDown(e) {
+addEventListener('keydown', (e) => {
     switch(e.key) {
         case('d'):
-            playerSpeed = 3; //* (60/fps)
-            
+            keys.right.press = true;
             break;
         case('a'):
-            playerSpeed = -3; //* (60/fps)
+            keys.left.press = true;
             break;
         case(' '):
-            jumpSpeed = 13
-            console.log(setInterval(yes, 150))
+            piggy.velocity.y = -5;
             break;
     }
+})
 
-}
-
-function keyUp(e) {
+addEventListener('keyup', (e) => {
     switch(e.key) {
         case('d'):
-            playerSpeed = 0;
+            keys.right.press = false;
             break;
         case('a'):
-            playerSpeed = 0; //* (60/fps)
+            keys.left.press = false;
             break;
-        // case(' '):
-        //     jumpSpeed = 0;
-        //     break;
     }
-}
+})
+
+const gameRefreshInterval = setInterval(gameRefresh, 1)
+
+
+
