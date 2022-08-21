@@ -14,7 +14,7 @@ function drawBox(x, y, width, height, color) {
     ctx.fillRect(x, y, width, height)
 }
 
-let gravity = .09;
+let gravity = .1;
 
 // adds character constructor to create a character's hitbox
 class Box {
@@ -27,8 +27,9 @@ class Box {
         this.alive = true;
         this.velocity = {
             x: 0,
-            y: 0.5
+            y: 0
         }
+        this.onPlatform = true;
     }
 
     render() {
@@ -38,6 +39,7 @@ class Box {
 
     update() {
         this.render()
+        this.velocity.y != 0 ? this.onPlatform = false : this.onPlatform = true;
         this.y += this.velocity.y;
         this.x += this.velocity.x;
 
@@ -45,6 +47,11 @@ class Box {
             this.velocity.y += gravity;
         } else {
             this.velocity.y = 0;
+        }
+
+        if(this.y <= 0)
+        {
+            this.y = 0;
         }
 
         if(this.x <= 0) {
@@ -128,6 +135,8 @@ let keys = {
     }
 }
 
+
+
 addEventListener('keydown', (e) => {
     switch(e.key) {
         case('d'):
@@ -137,7 +146,9 @@ addEventListener('keydown', (e) => {
             keys.left.press = true;
             break;
         case(' '):
-            piggy.velocity.y = -5;
+            if(piggy.onPlatform) {
+                piggy.velocity.y = -7;
+            }
             break;
     }
 })
@@ -149,6 +160,9 @@ addEventListener('keyup', (e) => {
             break;
         case('a'):
             keys.left.press = false;
+            break;
+        case(' '):
+            piggy.velocity.y = 0;
             break;
     }
 })
