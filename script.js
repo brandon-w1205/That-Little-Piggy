@@ -108,6 +108,10 @@ let knife = new Attack(1571, 630, 200, 20, 'darkgrey');
 
 let fps = 24
 
+let platformArr = [];
+setInterval(() => {
+    platformArr.push(new Platform(1171, 481, 400, 20, 'pink'))
+}, 2000)
 
 function gameRefresh() {
 
@@ -134,15 +138,18 @@ function gameRefresh() {
         knife.x -=3;
     }, 100)
 
-    platform1.render()
-    platform1.move()    
     
+    for(let i = 0; i < platformArr.length; i++) {
+        platformArr[i].render()
+        platformArr[i].x -= 3;
+        if(piggy.y + piggy.height <= platformArr[i].y && piggy.y + piggy.height + piggy.velocity.y >= platformArr[i].y && piggy.x + piggy.width > platformArr[i].x && piggy.x < platformArr[i].x + platformArr[i].width) {
+            piggy.velocity.y = 0;
+        }
+    }
     
 
     // platform1 collision detection (remember that the y + height gets added with the velocity which is why the second && statement is required)
-    if(piggy.y + piggy.height <= platform1.y && piggy.y + piggy.height + piggy.velocity.y >= platform1.y && piggy.x + piggy.width > platform1.x && piggy.x < platform1.x + platform1.width) {
-        piggy.velocity.y = 0;
-    }
+    
 
     if(keys.right.press && piggy.x < 1465) {
         piggy.velocity.x = 4;
