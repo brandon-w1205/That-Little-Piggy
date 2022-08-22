@@ -169,16 +169,12 @@ function gameRefresh() {
     playerMovement()
 
     if(keys.jChar.press) {
-        // let timeout = setTimeout(() => {
-        //     bullets.push(new Attack(piggy.x + piggy.width, piggy.y, 10, 10, 'red'))
-        // }, 1)
-        // clearTimeout(timeout, 2)
         bullets.push(new Attack(piggy.x + piggy.width, piggy.y, 10, 10, 'red'))
+        
     }
-    
     for(let i = 0; i < bullets.length; i++)  {
-            bullets[i].x += 3;   
-            bullets[i].render()
+            bullets[i*50].x += 3;   
+            bullets[i*50].render()
             
     }
 
