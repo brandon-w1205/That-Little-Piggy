@@ -43,11 +43,13 @@ class Player extends Box {
             y: 0
         }
         this.onPlatform = true;
+        this.inDash = false;
     }
 
     update() {
         this.render()
         this.velocity.y != 0 ? this.onPlatform = false : this.onPlatform = true;
+        this.velocity.x < -3 ? this.inDash = true : this.inDash = false;
         this.y += this.velocity.y;
         this.x += this.velocity.x;
 
@@ -91,9 +93,9 @@ let wolfWall = new Box(1570, 0, 1, 770, 'white');
 
 let ground = new Box(0, 715, 1720, 55, 'brown');
 
-let platform1 = new Platform(1200, 481, 200, 20, 'pink');
+let platform1 = new Platform(1200, 481, 400, 20, 'pink');
 
-let platform2 = new Platform(1571, 225, 200, 20, 'pink');
+let platform2 = new Platform(1571, 225, 400, 20, 'pink');
 
 
 let fps = 24
@@ -107,14 +109,12 @@ function gameRefresh() {
 
     platform2.render()
     setTimeout(() => {
-        
         platform2.x -= 3;
     }, 1000);
 
     // renders the items in game
     wolf.render();
     
-
     wolfWall.render();
 
     ground.render();
@@ -124,8 +124,8 @@ function gameRefresh() {
     platform1.render();
     // platform1.move();
 
-   
-    if(piggy.y + piggy.height <= platform1.y && piggy.y + piggy.height + piggy.velocity.y >= platform1.y && piggy.x + piggy.width > platform1.x && piggy.x + piggy.width < platform1.x + platform1.width) {
+    // platform1 collision detection (remember that the y + height gets added with the velocity which is why the second && statement is required)
+    if(piggy.y + piggy.height <= platform1.y && piggy.y + piggy.height + piggy.velocity.y >= platform1.y && piggy.x + piggy.width > platform1.x && piggy.x < platform1.x + platform1.width) {
         piggy.velocity.y = 0;
     }
 
@@ -146,10 +146,11 @@ let keys = {
     },
     left: {
         press: false
+    },
+    shift: {
+        press: false
     }
 }
-
-
 
 addEventListener('keydown', (e) => {
     switch(e.key) {
@@ -164,6 +165,18 @@ addEventListener('keydown', (e) => {
                 piggy.velocity.y = -9;
             }
             break;
+        // case('c'):
+        //     if(piggy.inDash) {
+        //         null
+        //     } else {
+        //         setInterval(() => {
+        //             keys.shift.press = true
+        //         }, 5)
+        //         if (keys.left.press && keys.shift.press && piggy.x > 0) {
+        //             piggy.velocity.x = -12;
+        //         }
+        //     break;
+        //     }
     }
 })
 
@@ -178,6 +191,8 @@ addEventListener('keyup', (e) => {
         case(' '):
             piggy.velocity.y = 0;
             break;
+        // case('c'):
+        //     keys.shift.press = false;
     }
 })
 
