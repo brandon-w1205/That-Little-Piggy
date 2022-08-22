@@ -14,7 +14,7 @@ function drawBox(x, y, width, height, color) {
     ctx.fillRect(x, y, width, height)
 }
 
-let gravity = .1;
+let gravity = .12;
 
 // adds character constructor to create a character's hitbox
 class Box {
@@ -85,6 +85,12 @@ class Platform extends Box {
     }
 }
 
+class Attack extends Box {
+    constructor(x, y, width, height, color) {
+        super(x, y, width, height, color)
+    }
+}
+
 let piggy = new Player(100, 100, 100, 100, "blue");
 
 let wolf = new Player (1616, 55, 114, 710, 'grey');
@@ -93,9 +99,11 @@ let wolfWall = new Box(1570, 0, 1, 770, 'white');
 
 let ground = new Box(0, 715, 1720, 55, 'brown');
 
-let platform1 = new Platform(1200, 481, 400, 20, 'pink');
+let platform1 = new Platform(1171, 481, 400, 20, 'pink');
 
 let platform2 = new Platform(1571, 225, 400, 20, 'pink');
+
+let knife = new Attack(1571, 630, 200, 20, 'darkgrey');
 
 
 let fps = 24
@@ -121,8 +129,15 @@ function gameRefresh() {
 
     piggy.update();
 
-    platform1.render();
-    // platform1.move();
+    knife.render();
+    setTimeout(() => {
+        knife.x -=3;
+    }, 100)
+
+    platform1.render()
+    platform1.move()    
+    
+    
 
     // platform1 collision detection (remember that the y + height gets added with the velocity which is why the second && statement is required)
     if(piggy.y + piggy.height <= platform1.y && piggy.y + piggy.height + piggy.velocity.y >= platform1.y && piggy.x + piggy.width > platform1.x && piggy.x < platform1.x + platform1.width) {
@@ -130,9 +145,9 @@ function gameRefresh() {
     }
 
     if(keys.right.press && piggy.x < 1465) {
-        piggy.velocity.x = 3;
+        piggy.velocity.x = 4;
     } else if (keys.left.press && piggy.x > 0) {
-        piggy.velocity.x = -3;
+        piggy.velocity.x = -4;
     } else {
         piggy.velocity.x = 0;
     }
@@ -188,15 +203,13 @@ addEventListener('keyup', (e) => {
         case('a'):
             keys.left.press = false;
             break;
-        case(' '):
-            piggy.velocity.y = 0;
-            break;
         // case('c'):
         //     keys.shift.press = false;
     }
 })
 
 setInterval(gameRefresh, 1)
+
 
 
 // elements on page render when clicking into the screen to play, will add a button to prompt player later
