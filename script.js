@@ -88,10 +88,12 @@ class Platform extends Box {
 class Attack extends Box {
     constructor(x, y, width, height, color) {
         super(x, y, width, height, color)
+        this.inShoot = false;
     }
+
 }
 
-let piggy = new Player(100, 100, 100, 100, "blue");
+let piggy = new Player(100, 100, 100, 100, "pink");
 
 let wolf = new Player (1616, 55, 114, 710, 'grey');
 
@@ -99,19 +101,35 @@ let wolfWall = new Box(1570, 0, 1, 770, 'white');
 
 let ground = new Box(0, 715, 1720, 55, 'brown');
 
-let platform1 = new Platform(1171, 481, 400, 20, 'pink');
+let platform1 = new Platform(1171, 481, 400, 20, 'blue');
 
-let platform2 = new Platform(1571, 225, 400, 20, 'pink');
+let platform2 = new Platform(1571, 225, 400, 20, 'blue');
 
 let knife = new Attack(1571, 630, 200, 20, 'darkgrey');
 
+// let bullet = new Attack(piggy.x + piggy.width, piggy.y, 10, 10, 'red');
 
 let fps = 24
 
 let platformArr = [];
 setInterval(() => {
-    platformArr.push(new Platform(1171, 481, 400, 20, 'pink'))
+    platformArr.push(new Platform(1571, 481, 400, 20, 'blue'))
 }, 2000)
+setInterval(() => {
+    platformArr.push(new Platform(1571, 225, 400, 20, 'blue'))
+}, 3500)
+
+function playerMovement() {
+    if(keys.right.press && piggy.x < 1465) {
+        piggy.velocity.x = 4;
+    } else if (keys.left.press && piggy.x > 0) {
+        piggy.velocity.x = -4;
+    } else {
+        piggy.velocity.x = 0;
+    }
+}
+
+let bullets = [];
 
 function gameRefresh() {
 
@@ -138,26 +156,34 @@ function gameRefresh() {
         knife.x -=3;
     }, 100)
 
-    
+    //    
     for(let i = 0; i < platformArr.length; i++) {
         platformArr[i].render()
-        platformArr[i].x -= 3;
+        platformArr[i].x -= 2.3;
+        // platform1 collision detection (remember that the y + height gets added with the velocity which is why the second && statement is required)
         if(piggy.y + piggy.height <= platformArr[i].y && piggy.y + piggy.height + piggy.velocity.y >= platformArr[i].y && piggy.x + piggy.width > platformArr[i].x && piggy.x < platformArr[i].x + platformArr[i].width) {
             piggy.velocity.y = 0;
         }
     }
-    
 
-    // platform1 collision detection (remember that the y + height gets added with the velocity which is why the second && statement is required)
-    
+    playerMovement()
 
-    if(keys.right.press && piggy.x < 1465) {
-        piggy.velocity.x = 4;
-    } else if (keys.left.press && piggy.x > 0) {
-        piggy.velocity.x = -4;
-    } else {
-        piggy.velocity.x = 0;
+    if(keys.jChar.press) {
+        // let timeout = setTimeout(() => {
+        //     bullets.push(new Attack(piggy.x + piggy.width, piggy.y, 10, 10, 'red'))
+        // }, 1)
+        // clearTimeout(timeout, 2)
+        bullets.push(new Attack(piggy.x + piggy.width, piggy.y, 10, 10, 'red'))
     }
+    
+    for(let i = 0; i < bullets.length; i++)  {
+            bullets[i].x += 3;   
+            bullets[i].render()
+            
+    }
+
+    
+    
     
 }
 
@@ -171,8 +197,15 @@ let keys = {
     },
     shift: {
         press: false
+    },
+    jChar: {
+        press: false
     }
 }
+
+let bulletTimeout = setTimeout(() => {
+    inShoot = false;
+}, 0);
 
 addEventListener('keydown', (e) => {
     switch(e.key) {
@@ -186,6 +219,15 @@ addEventListener('keydown', (e) => {
             if(piggy.onPlatform) {
                 piggy.velocity.y = -9;
             }
+            break;
+        case('j'):
+            keys.jChar.press = true;
+            // setInterval(() => {
+            //     inShoot = false;
+            // }, 3)
+            
+            // bullets.push(new Attack(piggy.x + piggy.width, piggy.y, 10, 10, 'red'));
+            
             break;
         // case('c'):
         //     if(piggy.inDash) {
@@ -210,6 +252,8 @@ addEventListener('keyup', (e) => {
         case('a'):
             keys.left.press = false;
             break;
+        case('j'):
+            keys.jChar.press = false;
         // case('c'):
         //     keys.shift.press = false;
     }
