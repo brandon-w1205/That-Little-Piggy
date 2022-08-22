@@ -86,16 +86,28 @@ class Platform extends Box {
 }
 
 class Attack extends Box {
-    constructor(x, y, width, height, color) {
+    constructor(x, y, width, height, color, attackPoints) {
         super(x, y, width, height, color)
-        this.inShoot = false;
+        this.attackPoints = attackPoints
     }
 
+    render() {
+        ctx.fillStyle = this.color;
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+        this.attackPoints = 1;
+    }
+}
+
+class Wolf extends Box {
+    constructor(x, y, width, height, color) {
+        super(x, y, width, height, color)
+        this.health = 100;
+    }
 }
 
 let piggy = new Player(100, 100, 100, 100, "pink");
 
-let wolf = new Player (1616, 55, 114, 710, 'grey');
+let wolf = new Wolf (1616, 55, 114, 710, 'grey');
 
 let wolfWall = new Box(1570, 0, 1, 770, 'white');
 
@@ -105,9 +117,7 @@ let platform1 = new Platform(1171, 481, 400, 20, 'blue');
 
 let platform2 = new Platform(1571, 225, 400, 20, 'blue');
 
-let knife = new Attack(1571, 630, 200, 20, 'darkgrey');
-
-// let bullet = new Attack(piggy.x + piggy.width, piggy.y, 10, 10, 'red');
+let knife = new Attack(1571, 630, 200, 20, 'darkgrey', 1);
 
 let fps = 24
 
@@ -130,6 +140,24 @@ function playerMovement() {
 }
 
 let bullets = [];
+
+function detectHit(attack, entity) {
+    const left = attack.x + attack.width >= entity.x
+    const right = attack.x <= entity.x + entity.width
+    const top = attack.y + attack.height >= entity.y
+    const bottom = attack.y <= entity.y + entity.height
+    if(left && right && bottom && top) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function wolfHitDetect(attack, entity) {
+    const left = attack.x == entity.x
+    return left;
+}
+
 
 function gameRefresh() {
 
@@ -169,14 +197,20 @@ function gameRefresh() {
     playerMovement()
 
     if(keys.jChar.press) {
-        bullets.push(new Attack(piggy.x + piggy.width, piggy.y, 10, 10, 'red'))
-        
+        bullets.push(new Attack(piggy.x + piggy.width, piggy.y, 10, 10, 'red', 1))
     }
-    for(let i = 0; i < bullets.length; i++)  {
-            bullets[i*50].x += 3;   
-            bullets[i*50].render()
+
+    for(let i = 0; i < bullets.length; i += 50)  {
+            bullets[i].x += 3; 
+            bullets[i].render()
             
+            
+            if(wolfHitDetect(bullets[i], wolf) === true) {
+                wolf.health -= bullets[i].attackPoints
+                console.log(wolf.health)
+            }
     }
+    
 
     
     
@@ -199,9 +233,6 @@ let keys = {
     }
 }
 
-let bulletTimeout = setTimeout(() => {
-    inShoot = false;
-}, 0);
 
 addEventListener('keydown', (e) => {
     switch(e.key) {
@@ -218,12 +249,6 @@ addEventListener('keydown', (e) => {
             break;
         case('j'):
             keys.jChar.press = true;
-            // setInterval(() => {
-            //     inShoot = false;
-            // }, 3)
-            
-            // bullets.push(new Attack(piggy.x + piggy.width, piggy.y, 10, 10, 'red'));
-            
             break;
         // case('c'):
         //     if(piggy.inDash) {
