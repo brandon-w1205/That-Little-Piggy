@@ -37,6 +37,8 @@ class Box {
 class Player extends Box {
     constructor(x, y, width, height, color) {
         super(x, y, width, height, color)
+        this.health = 3;
+        this.iFrames = false;
         this.alive = true;
         this.velocity = {
             x: 0,
@@ -91,11 +93,11 @@ class Attack extends Box {
         this.attackPoints = attackPoints
     }
 
-    render() {
-        ctx.fillStyle = this.color;
-        ctx.fillRect(this.x, this.y, this.width, this.height);
-        this.attackPoints = 1;
-    }
+    // render() {
+    //     ctx.fillStyle = this.color;
+    //     ctx.fillRect(this.x, this.y, this.width, this.height);
+    //     this.attackPoints = 1;
+    // }
 }
 
 class Wolf extends Box {
@@ -119,16 +121,6 @@ let platform2 = new Platform(1571, 225, 400, 20, 'blue');
 
 let knife = new Attack(1571, 630, 200, 20, 'darkgrey', 1);
 
-let fps = 24
-
-let platformArr = [];
-setInterval(() => {
-    platformArr.push(new Platform(1571, 481, 400, 20, 'blue'))
-}, 2000)
-setInterval(() => {
-    platformArr.push(new Platform(1571, 225, 400, 20, 'blue'))
-}, 3500)
-
 function playerMovement() {
     if(keys.right.press && piggy.x < 1465) {
         piggy.velocity.x = 4;
@@ -139,25 +131,51 @@ function playerMovement() {
     }
 }
 
+
+
+
+let platformArr = [];
+setInterval(() => {
+    platformArr.push(new Platform(1571, 481, 400, 20, 'blue'))
+}, 2000)
+setInterval(() => {
+    platformArr.push(new Platform(1571, 225, 400, 20, 'blue'))
+}, 3500)
+
+
 let bullets = [];
 
-function detectHit(attack, entity) {
-    const left = attack.x + attack.width >= entity.x
-    const right = attack.x <= entity.x + entity.width
-    const top = attack.y + attack.height >= entity.y
-    const bottom = attack.y <= entity.y + entity.height
-    if(left && right && bottom && top) {
-        return true;
-    } else {
-        return false;
-    }
+
+let knivesArr = [];
+setInterval(() => {
+    // knife low
+    knivesArr.push(new Attack(1571, 630, 200, 20, 'darkgrey', 1))
+}, 3000)
+
+setInterval(() => {
+    // knife mid
+    knivesArr.push(new Attack(1571, 400, 200, 20, 'darkgrey', 1))
+}, 4000)
+
+setInterval(() => {
+    // knife top
+    knivesArr.push(new Attack(1571, 150, 200, 20, 'darkgrey', 1))
+}, 5000)
+
+function detectHitRight(attack, entity) {
+    const right = entity.x + entity.width >= attack.x
+    const left = entity.x <= attack.x + attack.width
+    const top = entity.y + entity.height >= attack.y
+    const bottom = entity.y <= attack.y + attack.height
+    return  (right && left && top && bottom)
+
 }
 
 function wolfHitDetect(attack, entity) {
-    const left = attack.x == entity.x
-    return left;
+    return entity.x >= attack.x && entity.x <= attack.x + attack.width
 }
 
+let refresh = setInterval(gameRefresh, 1)
 
 function gameRefresh() {
 
@@ -177,22 +195,9 @@ function gameRefresh() {
 
     ground.render();
 
+    
+
     piggy.update();
-
-    knife.render();
-    setTimeout(() => {
-        knife.x -=3;
-    }, 100)
-
-    //    
-    for(let i = 0; i < platformArr.length; i++) {
-        platformArr[i].render()
-        platformArr[i].x -= 2.3;
-        // platform1 collision detection (remember that the y + height gets added with the velocity which is why the second && statement is required)
-        if(piggy.y + piggy.height <= platformArr[i].y && piggy.y + piggy.height + piggy.velocity.y >= platformArr[i].y && piggy.x + piggy.width > platformArr[i].x && piggy.x < platformArr[i].x + platformArr[i].width) {
-            piggy.velocity.y = 0;
-        }
-    }
 
     playerMovement()
 
@@ -201,17 +206,54 @@ function gameRefresh() {
     }
 
     for(let i = 0; i < bullets.length; i += 50)  {
-            bullets[i].x += 3; 
-            bullets[i].render()
-            
-            
-            if(wolfHitDetect(bullets[i], wolf) === true) {
-                wolf.health -= bullets[i].attackPoints
-                console.log(wolf.health)
-            }
+        bullets[i].render()
+        bullets[i].x += 3; 
+        
+        if(wolfHitDetect(bullets[i], wolf) === true) {
+            wolf.health -= bullets[i].attackPoints
+            console.log(wolf.health)
+        }
     }
+
+
     
 
+    for(let j = 0; j < platformArr.length; j++) {
+        platformArr[j].render()
+        platformArr[j].x -= 2.3;
+        // platform1 collision detection (remember that the y + height gets added with the velocity which is why the second && statement is required)
+        if(piggy.y + piggy.height <= platformArr[j].y && piggy.y + piggy.height + piggy.velocity.y >= platformArr[j].y && piggy.x + piggy.width > platformArr[j].x && piggy.x < platformArr[j].x + platformArr[j].width) {
+            piggy.velocity.y = 0;
+        }
+    }
+
+    
+
+    
+
+    for(let k = 0; k < knivesArr.length; k++) {
+        knivesArr[k].render()
+        knivesArr[k].x -= 2;
+        if(detectHitRight(knivesArr[k], piggy) === true && piggy.iFrames == false) {
+            piggy.health -= knivesArr[k].attackPoints
+            piggy.iFrames = true;
+            piggy.color = 'white';
+            setTimeout (() => {
+                piggy.iFrames = false;
+                piggy.color = 'pink';
+            }, 4000)
+            console.log(piggy.health)
+        } //else if(detectHitRight(knivesArr[k], piggy) === false && piggy.iFrames === true) {
+            
+        // }
+    }
+
+    
+    
+    
+    if(wolf.health == 0){
+        clearInterval(refresh, 0);
+    }
     
     
     
@@ -280,7 +322,7 @@ addEventListener('keyup', (e) => {
     }
 })
 
-setInterval(gameRefresh, 1)
+
 
 
 
