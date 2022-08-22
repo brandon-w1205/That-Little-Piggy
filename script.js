@@ -69,19 +69,18 @@ class Player extends Box {
     }
 }
 
-class Platform {
-    constructor() {
-        this.position = {
+class Platform extends Box {
+    constructor(x, y, width, height, color) {
+        super(x, y, width, height, color)
+        this.spot = {
             x: 0,
             y: 0
         }
-        this.width = 200
-        this.height = 20
     }
 
-    render() {
+    move() {
+        this.x -= 1;
     }
-
 }
 
 let piggy = new Player(100, 100, 100, 100, "blue");
@@ -92,50 +91,43 @@ let wolfWall = new Box(1570, 0, 1, 770, 'white');
 
 let ground = new Box(0, 715, 1720, 55, 'brown');
 
+let platform1 = new Platform(1200, 481, 200, 20, 'pink');
 
+let platform2 = new Platform(1571, 225, 200, 20, 'pink');
 
 
 let fps = 24
 
 
-
-
-
-
-
-function rightJump() {
-
-}
-
-// elements on page render when clicking into the screen to play, will add a button to prompt player later
-canvas.addEventListener('click', e => {
-    console.log(e.offsetX, e.offsetY);
-    console.log(piggy.y)
-})
-
-
-
-
-
-
-
-
-
-
 function gameRefresh() {
+
     // clears the canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+
+    platform2.render()
+    setTimeout(() => {
+        
+        platform2.x -= 3;
+    }, 1000);
 
     // renders the items in game
     wolf.render();
     
-    // piggy.render();
 
     wolfWall.render();
 
     ground.render();
 
     piggy.update();
+
+    platform1.render();
+    // platform1.move();
+
+   
+    if(piggy.y + piggy.height <= platform1.y && piggy.y + piggy.height + piggy.velocity.y >= platform1.y && piggy.x + piggy.width > platform1.x && piggy.x + piggy.width < platform1.x + platform1.width) {
+        piggy.velocity.y = 0;
+    }
 
     if(keys.right.press && piggy.x < 1465) {
         piggy.velocity.x = 3;
@@ -146,6 +138,7 @@ function gameRefresh() {
     }
     
 }
+
 
 let keys = {
     right: {
@@ -168,7 +161,7 @@ addEventListener('keydown', (e) => {
             break;
         case(' '):
             if(piggy.onPlatform) {
-                piggy.velocity.y = -7;
+                piggy.velocity.y = -9;
             }
             break;
     }
@@ -188,7 +181,13 @@ addEventListener('keyup', (e) => {
     }
 })
 
-const gameRefreshInterval = setInterval(gameRefresh, 1)
+setInterval(gameRefresh, 1)
 
+
+// elements on page render when clicking into the screen to play, will add a button to prompt player later
+canvas.addEventListener('click', (e) => {
+    
+    console.log(e.offsetX, e.offsetY);
+})
 
 
