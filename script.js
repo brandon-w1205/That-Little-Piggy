@@ -8,6 +8,14 @@ const ctx = canvas.getContext('2d');
 canvas.setAttribute('height', getComputedStyle(canvas)['height'])
 canvas.setAttribute('width', getComputedStyle(canvas)['width'])
 
+let gameState = false;
+
+
+
+
+
+
+
 // adds a function that will drawboxes upon variable input
 function drawBox(x, y, width, height, color) {
     ctx.fillStyle = color;
@@ -82,9 +90,9 @@ class Platform extends Box {
         }
     }
 
-    move() {
-        this.x -= 1;
-    }
+    // move() {
+    //     this.x -= 1;
+    // }
 }
 
 class Attack extends Box {
@@ -92,12 +100,6 @@ class Attack extends Box {
         super(x, y, width, height, color)
         this.attackPoints = attackPoints
     }
-
-    // render() {
-    //     ctx.fillStyle = this.color;
-    //     ctx.fillRect(this.x, this.y, this.width, this.height);
-    //     this.attackPoints = 1;
-    // }
 }
 
 class Wolf extends Box {
@@ -132,6 +134,25 @@ class Health extends Box {
     }
 }
 
+class armAttack extends Attack {
+    constructor(x, y, width, height, color, attackPoints) {
+        super(x, y, width, height, color, attackPoints)
+    }
+
+    movement() {
+        this.render()
+        setInterval(() => {
+            this.x -= 6
+        })
+        setInterval(() => {
+            this.x += 6
+        }, 2000)
+        
+            
+        
+    }
+}
+
 let piggy = new Player(100, 100, 100, 100, "pink");
 
 let wolf = new Wolf (1616, 55, 114, 710, 'grey');
@@ -149,6 +170,8 @@ let heart1 = new Health(5, 5, 50, 50, 'red');
 let heart2 = new Health(60, 5, 50, 50, 'red');
 
 let heart3 = new Health(115, 5, 50, 50, 'red');
+
+let firstArm = new armAttack(1571, 630, 1571, 40, 'black', 1)
 
 // let knives = new Attack(1571, 630, 200, 20, 'darkgrey', 1);
 
@@ -181,7 +204,7 @@ let knivesArr = [];
 setInterval(() => {
     // knives low
     knivesArr.push(new Attack(1571, 630, 200, 20, 'darkgrey', 1))
-}, 3000)
+}, 3000) // Math.floor(Math.random() * (6000-2000) + 2000))
 
 setInterval(() => {
     // knives mid
@@ -220,7 +243,7 @@ setInterval(() => {
 setInterval(() => {
     // forks
     forksArr.push(new Attack(1491, -100, 20, 100, 'darkgrey', 1))
-}, 2000)
+}, 3500)
 
 
 
@@ -228,10 +251,10 @@ setInterval(() => {
 
 
 function detectHit(attack, entity) {
-    const right = entity.x + entity.width + entity.velocity.x >= attack.x
-    const left = entity.x + entity.velocity.x <= attack.x + attack.width
-    const top = entity.y + entity.height + entity.velocity.y >= attack.y
-    const bottom = entity.y + entity.velocity.y <= attack.y + attack.height
+    const right = entity.x + entity.width - entity.velocity.x >= attack.x
+    const left = entity.x - entity.velocity.x <= attack.x + attack.width
+    const top = entity.y + entity.height - entity.velocity.y >= attack.y
+    const bottom = entity.y - entity.velocity.y <= attack.y + attack.height
     return (right && left && top && bottom)
 }
 
@@ -239,18 +262,87 @@ function wolfHitDetect(attack, entity) {
     return entity.x >= attack.x && entity.x <= attack.x + attack.width
 }
 
-let refresh = setInterval(gameRefresh, 1)
 
-function gameRefresh() {
+
+
+
+let keys = {
+    right: {
+        press: false
+    },
+    left: {
+        press: false
+    },
+    shift: {
+        press: false
+    },
+    jChar: {
+        press: false
+    }
+}
+
+
+addEventListener('keydown', (e) => {
+    switch(e.key) {
+        case('d'):
+            keys.right.press = true;         
+            break;
+        case('a'):
+            keys.left.press = true;
+            break;
+        case(' '):
+            if(piggy.onPlatform) {
+                piggy.velocity.y = -9;
+            }
+            break;
+        case('s'):
+            if(piggy.onPlatform && piggy.y + piggy.height < 715)
+            piggy.velocity.y = 1;
+            break;
+        case('j'):
+            keys.jChar.press = true;
+            break;
+        // case('c'):
+        //     if(piggy.inDash) {
+        //         null
+        //     } else {
+        //         setInterval(() => {
+        //             keys.shift.press = true
+        //         }, 5)
+        //         if (keys.left.press && keys.shift.press && piggy.x > 0) {
+        //             piggy.velocity.x = -12;
+        //         }
+        //     break;
+        //     }
+    }
+})
+
+addEventListener('keyup', (e) => {
+    switch(e.key) {
+        case('d'):
+            keys.right.press = false;
+            break;
+        case('a'):
+            keys.left.press = false;
+            break;
+        case('j'):
+            keys.jChar.press = false;
+            break;
+        // case('c'):
+        //     keys.shift.press = false;
+    }
+})
+
+
+// gameLoop()
+
+let looping = setInterval(gameLoop, 1)
+
+function gameLoop() {
 
     // clears the canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-
-    platform2.render()
-    setTimeout(() => {
-        platform2.x -= 3;
-    }, 1000);
 
     // renders the items in game
     wolf.render();
@@ -304,7 +396,7 @@ function gameRefresh() {
 
     
 
-    if(wolf.health >= 76) {
+    if(wolf.health >= 51) {
         for(let k = 0; k < knivesArr.length; k++) {
             knivesArr[k].render()
             knivesArr[k].x -= 2;
@@ -315,113 +407,60 @@ function gameRefresh() {
                 setTimeout (() => {
                     piggy.iFrames = false;
                     piggy.color = 'pink';
-                }, 4000)
+                }, 3000)
                 console.log(piggy.health)
             }
         }
     }
 
-    for(let l = 0; l < forksArr.length; l++) {
-        forksArr[l].render();
-        forksArr[l].y += 2;
-        if(detectHit(forksArr[l], piggy) === true && piggy.iFrames == false) {
-            piggy.health -= forksArr[l].attackPoints;
-            piggy.iFrames = true;
-            piggy.color = 'white';
-            setTimeout(() => {
-                piggy.iFrames = false;
-                piggy.color = 'pink';
-            }, 4000)
-            console.log(piggy.health)
+    if(wolf.health <= 75 && wolf.health >= 51) {
+        for(let l = 0; l < forksArr.length; l++) {
+            forksArr[l].render();
+            forksArr[l].y += 2;
+            if(detectHit(forksArr[l], piggy) === true && piggy.iFrames == false) {
+                piggy.health -= forksArr[l].attackPoints;
+                piggy.iFrames = true;
+                piggy.color = 'white';
+                setTimeout(() => {
+                    piggy.iFrames = false;
+                    piggy.color = 'pink';
+                }, 3000)
+                console.log(piggy.health)
+            }
         }
     }
 
-    
-    if(piggy.health == 0) {
-        heart3.color = 'darkgrey';
-        clearInterval(refresh, 5000);
+    if(wolf.health <= 45) {
+        
+    }
+
+    firstArm.movement()
+
+    if(piggy.health == -1) {
+        gameHeader.innerText = 'You Lose';
+        clearInterval(looping, 0)
     }
 
     
     if(wolf.health == 0){
-        clearInterval(refresh, 0);
+        gameHeader.innerText = 'You Win!';
+        clearInterval(looping, 0);
     }
     
-    
-    
+    // requestAnimationFrame(gameLoop)
 }
 
-
-let keys = {
-    right: {
-        press: false
-    },
-    left: {
-        press: false
-    },
-    shift: {
-        press: false
-    },
-    jChar: {
-        press: false
-    }
-}
-
-
-addEventListener('keydown', (e) => {
-    switch(e.key) {
-        case('d'):
-            keys.right.press = true;         
-            break;
-        case('a'):
-            keys.left.press = true;
-            break;
-        case(' '):
-            if(piggy.onPlatform) {
-                piggy.velocity.y = -9;
-            }
-            break;
-        case('j'):
-            keys.jChar.press = true;
-            break;
-        // case('c'):
-        //     if(piggy.inDash) {
-        //         null
-        //     } else {
-        //         setInterval(() => {
-        //             keys.shift.press = true
-        //         }, 5)
-        //         if (keys.left.press && keys.shift.press && piggy.x > 0) {
-        //             piggy.velocity.x = -12;
-        //         }
-        //     break;
-        //     }
-    }
-})
-
-addEventListener('keyup', (e) => {
-    switch(e.key) {
-        case('d'):
-            keys.right.press = false;
-            break;
-        case('a'):
-            keys.left.press = false;
-            break;
-        case('j'):
-            keys.jChar.press = false;
-        // case('c'):
-        //     keys.shift.press = false;
-    }
-})
-
-
-
-
-
-// elements on page render when clicking into the screen to play, will add a button to prompt player later
-canvas.addEventListener('click', (e) => {
+canvas.addEventListener('click', () => {
+    // console.log(e.offsetX, e.offsetY)
+    location.reload();
     
-    console.log(e.offsetX, e.offsetY);
 })
 
+
+
+
+
+playAgain.addEventListener('click', (e) => {
+    location.reload()
+})
 
