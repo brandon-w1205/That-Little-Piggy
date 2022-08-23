@@ -8,7 +8,7 @@ const ctx = canvas.getContext('2d');
 canvas.setAttribute('height', getComputedStyle(canvas)['height'])
 canvas.setAttribute('width', getComputedStyle(canvas)['width'])
 
-let gameState = false;
+
 
 
 
@@ -154,26 +154,41 @@ class armAttack extends Attack {
 }
 
 let piggy = new Player(100, 100, 100, 100, "pink");
-
 let wolf = new Wolf (1616, 55, 114, 710, 'grey');
-
 let wolfWall = new Box(1570, 0, 1, 770, 'white');
-
 let ground = new Box(0, 715, 1720, 55, 'brown');
-
 let platform1 = new Platform(1171, 481, 400, 20, 'blue');
-
 let platform2 = new Platform(1571, 225, 400, 20, 'blue');
-
 let heart1 = new Health(5, 5, 50, 50, 'red');
-
 let heart2 = new Health(60, 5, 50, 50, 'red');
-
 let heart3 = new Health(115, 5, 50, 50, 'red');
+// let firstArm = new armAttack(1571, 630, 1571, 40, 'black', 1);
 
-let firstArm = new armAttack(1571, 630, 1571, 40, 'black', 1)
 
-// let knives = new Attack(1571, 630, 200, 20, 'darkgrey', 1);
+let platformArr = [];
+let bullets = [];
+let knivesArr = [];
+let forksArr = [];
+
+// testing init function
+function init() {
+    platformArr = [];
+    bullets = [];
+    knivesArr = [];
+    forksArr = [];
+    piggy = new Player(100, 100, 100, 100, "pink");
+    wolf = new Wolf (1616, 55, 114, 710, 'grey');
+    wolfWall = new Box(1570, 0, 1, 770, 'white');
+    ground = new Box(0, 715, 1720, 55, 'brown');
+    // platform1 = new Platform(1171, 481, 400, 20, 'blue');
+    // platform2 = new Platform(1571, 225, 400, 20, 'blue');
+    heart1 = new Health(5, 5, 50, 50, 'red');
+    heart2 = new Health(60, 5, 50, 50, 'red');
+    heart3 = new Health(115, 5, 50, 50, 'red');
+    // firstArm = new armAttack(1571, 630, 1571, 40, 'black', 1);
+}
+
+
 
 function playerMovement() {
     if(keys.right.press && piggy.x < 1465) {
@@ -188,62 +203,62 @@ function playerMovement() {
 
 
 
-let platformArr = [];
-setInterval(() => {
-    platformArr.push(new Platform(1571, 481, 400, 20, 'blue'))
-}, 2000)
-setInterval(() => {
-    platformArr.push(new Platform(1571, 225, 400, 20, 'blue'))
-}, 3500)
+function spawnEnemies() {
+    // Platform Intervals
+    setInterval(() => {
+        platformArr.push(new Platform(1571, 481, 400, 20, 'blue'))
+    }, 2000)
+    setInterval(() => {
+        platformArr.push(new Platform(1571, 225, 400, 20, 'blue'))
+    }, 3500)
 
 
-let bullets = [];
+    // Knife Intervals
+    setInterval(() => {
+        // knives low
+        knivesArr.push(new Attack(1571, 630, 200, 20, 'darkgrey', 1))
+    }, 3000) // Math.floor(Math.random() * (6000-2000) + 2000))
+
+    setInterval(() => {
+        // knives mid
+        knivesArr.push(new Attack(1571, 400, 200, 20, 'darkgrey', 1))
+    }, 4000)
+
+    setInterval(() => {
+        // knives top
+        knivesArr.push(new Attack(1571, 150, 200, 20, 'darkgrey', 1))
+    }, 5000)
 
 
-let knivesArr = [];
-setInterval(() => {
-    // knives low
-    knivesArr.push(new Attack(1571, 630, 200, 20, 'darkgrey', 1))
-}, 3000) // Math.floor(Math.random() * (6000-2000) + 2000))
+    // Fork Intervals
+    setInterval(() => {
+        // forks
+        forksArr.push(new Attack(80, -100, 20, 100, 'darkgrey', 1))
+    }, 2500)
 
-setInterval(() => {
-    // knives mid
-    knivesArr.push(new Attack(1571, 400, 200, 20, 'darkgrey', 1))
-}, 4000)
+    setInterval(() => {
+        // forks
+        forksArr.push(new Attack(373, -100, 20, 100, 'darkgrey', 1))
+    }, 3000)
 
-setInterval(() => {
-    // knives top
-    knivesArr.push(new Attack(1571, 150, 200, 20, 'darkgrey', 1))
-}, 5000)
+    setInterval(() => {
+        // forks
+        forksArr.push(new Attack(745, -100, 20, 100, 'darkgrey', 1))
+    }, 5500)
+
+    setInterval(() => {
+        // forks
+        forksArr.push(new Attack(1118, -100, 20, 100, 'darkgrey', 1))
+    }, 5000)
+
+    setInterval(() => {
+        // forks
+        forksArr.push(new Attack(1491, -100, 20, 100, 'darkgrey', 1))
+    }, 3500)
+}
 
 
 
-let forksArr = [];
-
-setInterval(() => {
-    // forks
-    forksArr.push(new Attack(80, -100, 20, 100, 'darkgrey', 1))
-}, 2500)
-
-setInterval(() => {
-    // forks
-    forksArr.push(new Attack(373, -100, 20, 100, 'darkgrey', 1))
-}, 3000)
-
-setInterval(() => {
-    // forks
-    forksArr.push(new Attack(745, -100, 20, 100, 'darkgrey', 1))
-}, 5500)
-
-setInterval(() => {
-    // forks
-    forksArr.push(new Attack(1118, -100, 20, 100, 'darkgrey', 1))
-}, 5000)
-
-setInterval(() => {
-    // forks
-    forksArr.push(new Attack(1491, -100, 20, 100, 'darkgrey', 1))
-}, 3500)
 
 
 
@@ -336,7 +351,11 @@ addEventListener('keyup', (e) => {
 
 // gameLoop()
 
+
+
 let looping = setInterval(gameLoop, 1)
+
+spawnEnemies()
 
 function gameLoop() {
 
@@ -442,7 +461,7 @@ function gameLoop() {
     }
 
     
-    if(wolf.health == 0){
+    if(wolf.health == 0) {
         gameHeader.innerText = 'You Win!';
         clearInterval(looping, 0);
     }
@@ -452,7 +471,9 @@ function gameLoop() {
 
 canvas.addEventListener('click', () => {
     // console.log(e.offsetX, e.offsetY)
-    location.reload();
+    init()
+    gameLoop()
+    spawnEnemies()
     
 })
 
