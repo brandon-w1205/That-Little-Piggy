@@ -55,9 +55,10 @@ main {
     align-items: center;
     background-color: blue;
     color: white;
+    user-select: none;
 }
 
-.Loss, .Won {
+.Loss, .Won, .Prompt {
     display: grid;
     text-align: center;
     position: absolute;
@@ -68,4 +69,6 @@ main {
     width: 600;
     height: 600;
     margin: 300px 500px 500px 500px;
+    display: none;
+    user-select: none;
 }

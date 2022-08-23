@@ -22,7 +22,7 @@ canvas.setAttribute('width', getComputedStyle(canvas)['width'])
 //     ctx.fillRect(x, y, width, height)
 // }
 
-let gravity = .12;
+let gravity = .15;
 
 // adds character constructor to create a character's hitbox
 class Box {
@@ -153,7 +153,7 @@ class armAttack extends Attack {
     }
 }
 
-let piggy = new Player(100, 100, 100, 100, "pink");
+let piggy = new Player(100, 614, 100, 100, "pink");
 let wolf = new Wolf (1616, 55, 114, 710, 'grey');
 let wolfWall = new Box(1570, 0, 1, 770, 'white');
 let ground = new Box(0, 715, 1720, 55, 'brown');
@@ -178,7 +178,7 @@ function init() {
     bullets = [];
     knivesArr = [];
     forksArr = [];
-    piggy = new Player(100, 100, 100, 100, "pink");
+    piggy = new Player(100, 614, 100, 100, "pink");
     wolf = new Wolf (1616, 55, 114, 710, 'grey');
     wolfWall = new Box(1570, 0, 1, 770, 'white');
     ground = new Box(0, 715, 1720, 55, 'brown');
@@ -348,9 +348,12 @@ addEventListener('keyup', (e) => {
     }
 })
 
+let loser = document.querySelector(".Loss");
+let winner = document.querySelector(".Won");
 
+let prompt = document.querySelector(".Prompt");
 
-
+prompt.style.display = 'grid';
 
 
 // let looping = setInterval(gameLoop, 1)
@@ -359,115 +362,115 @@ addEventListener('keyup', (e) => {
 function gameLoop() {
     if(gameState) {
 
-    
-    requestAnimationFrame(gameLoop)
-    // clears the canvas
-    
-    
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
-
-    
-    // renders the items in game
-    wolf.render();
-    
-    wolfWall.render();
-
-    ground.render();
-
-    heart1.render();
-    heart1.hit()
-    heart2.render();
-    heart2.hit();
-    
-    heart3.render();
-    heart3.hit();
-    piggy.update();
-
-
-
-    playerMovement()
-
-    if(keys.jChar.press) {
-        bullets.push(new Attack(piggy.x + piggy.width, piggy.y, 10, 10, 'red', 1))
-    }
-
-    for(let i = 0; i < bullets.length; i += 50)  {
-        bullets[i].render();
-        bullets[i].x += 3; 
+        requestAnimationFrame(gameLoop)
+        // clears the canvas
         
-        if(wolfHitDetect(bullets[i], wolf) === true && wolf.iFrames == false) {
-            wolf.health -= bullets[i].attackPoints
-            wolf.iFrames = true;
-            setTimeout (() => {
-                wolf.iFrames = false;
-            }, 200)
-            console.log(wolf.health)
+        
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+        
+        // renders the items in game
+        wolf.render();
+        
+        wolfWall.render();
+
+        ground.render();
+
+        heart1.render();
+        heart1.hit()
+        heart2.render();
+        heart2.hit();
+        
+        heart3.render();
+        heart3.hit();
+        piggy.update();
+
+
+
+        playerMovement()
+
+        if(keys.jChar.press) {
+            bullets.push(new Attack(piggy.x + piggy.width, piggy.y, 10, 10, 'red', 1))
         }
-    }
 
-    for(let j = 0; j < platformArr.length; j++) {
-        platformArr[j].render();
-        platformArr[j].x -= 2.3;
-        // platform1 collision detection (remember that the y + height gets added with the velocity which is why the second && statement is required)
-        if(piggy.y + piggy.height <= platformArr[j].y && piggy.y + piggy.height + piggy.velocity.y >= platformArr[j].y && piggy.x + piggy.width > platformArr[j].x && piggy.x < platformArr[j].x + platformArr[j].width) {
-            piggy.velocity.y = 0;
-        }
-    }
-
-    
-
-    if(wolf.health >= 51) {
-        for(let k = 0; k < knivesArr.length; k++) {
-            knivesArr[k].render()
-            knivesArr[k].x -= 2;
-            if(detectHit(knivesArr[k], piggy) === true && piggy.iFrames == false) {
-                piggy.health -= knivesArr[k].attackPoints
-                piggy.iFrames = true;
-                piggy.color = 'white';
+        for(let i = 0; i < bullets.length; i += 50)  {
+            bullets[i].render();
+            bullets[i].x += 3; 
+            
+            if(wolfHitDetect(bullets[i], wolf) === true && wolf.iFrames == false) {
+                wolf.health -= bullets[i].attackPoints
+                wolf.iFrames = true;
                 setTimeout (() => {
-                    piggy.iFrames = false;
-                    piggy.color = 'pink';
-                }, 3000)
-                console.log(piggy.health)
+                    wolf.iFrames = false;
+                }, 200)
+                console.log(wolf.health)
             }
         }
-    }
 
-    if(wolf.health <= 75 && wolf.health >= 51) {
-        for(let l = 0; l < forksArr.length; l++) {
-            forksArr[l].render();
-            forksArr[l].y += 2;
-            if(detectHit(forksArr[l], piggy) === true && piggy.iFrames == false) {
-                piggy.health -= forksArr[l].attackPoints;
-                piggy.iFrames = true;
-                piggy.color = 'white';
-                setTimeout(() => {
-                    piggy.iFrames = false;
-                    piggy.color = 'pink';
-                }, 3000)
-                console.log(piggy.health)
+        for(let j = 0; j < platformArr.length; j++) {
+            platformArr[j].render();
+            platformArr[j].x -= 2.3;
+            // platform1 collision detection (remember that the y + height gets added with the velocity which is why the second && statement is required)
+            if(piggy.y + piggy.height <= platformArr[j].y && piggy.y + piggy.height + piggy.velocity.y >= platformArr[j].y && piggy.x + piggy.width > platformArr[j].x && piggy.x < platformArr[j].x + platformArr[j].width) {
+                piggy.velocity.y = 0;
             }
         }
-    }
 
-    if(wolf.health <= 45) {
         
-    }
 
-    // firstArm.movement()
+        if(wolf.health >= 51) {
+            for(let k = 0; k < knivesArr.length; k++) {
+                knivesArr[k].render()
+                knivesArr[k].x -= 2;
+                if(detectHit(knivesArr[k], piggy) === true && piggy.iFrames == false) {
+                    piggy.health -= knivesArr[k].attackPoints
+                    piggy.iFrames = true;
+                    piggy.color = 'white';
+                    setTimeout (() => {
+                        piggy.iFrames = false;
+                        piggy.color = 'pink';
+                    }, 3000)
+                    console.log(piggy.health)
+                }
+            }
+        }
 
-    if(piggy.health == -1) {
-        gameHeader.innerText = 'You Lose';
-        gameState = false;
-        // clearInterval(gameLoop(), 0)
-    }
+        if(wolf.health <= 75 && wolf.health >= 51) {
+            for(let l = 0; l < forksArr.length; l++) {
+                forksArr[l].render();
+                forksArr[l].y += 2;
+                if(detectHit(forksArr[l], piggy) === true && piggy.iFrames == false) {
+                    piggy.health -= forksArr[l].attackPoints;
+                    piggy.iFrames = true;
+                    piggy.color = 'white';
+                    setTimeout(() => {
+                        piggy.iFrames = false;
+                        piggy.color = 'pink';
+                    }, 3000)
+                    console.log(piggy.health)
+                }
+            }
+        }
 
-    
-    if(wolf.health == 0) {
-        gameHeader.innerText = 'You Win!';
-        // clearInterval(gameLoop(), 0);
+        if(wolf.health <= 45) {
+            
+        }
+
+        // firstArm.movement()
+
+        if(piggy.health == -1) {
+            gameHeader.innerText = 'You Lose';
+            loser.style.display = 'grid';
+            gameState = false;
+        }
+
+        
+        if(wolf.health == 0) {
+            gameHeader.innerText = 'You Win!';
+            winner.style.display = 'grid';
+            gameState = false;
+        }
     }
-}
 }
 
 spawnEnemies()
@@ -488,8 +491,9 @@ playAgain.addEventListener('click', () => {
         init()
         gameState = true;
         gameLoop()
-        
-        
+        loser.style.display = 'none'
+        winner.style.display = 'none'
+        prompt.style.display = 'none'
         console.log(gameLoop)
     }
 })
