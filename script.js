@@ -108,6 +108,30 @@ class Wolf extends Box {
     }
 }
 
+class Health extends Box {
+    constructor(x, y, width, height, color) {
+        super(x, y, width, height, color)
+    }
+
+    hit() {
+        if(piggy.health === 3) {
+            heart1.color = 'red';
+        } else {
+            heart1.color = 'darkgrey'
+        }
+        if(piggy.health === 2 || piggy.health === 3) {
+            heart2.color = 'red';
+        } else {
+            heart2.color = 'darkgrey'
+        }
+        if(piggy.health === 1 || piggy.health === 2 || piggy.health === 3) {
+            heart3.color = 'red';
+        } else {
+            heart3.color = 'darkgrey'
+        }
+    }
+}
+
 let piggy = new Player(100, 100, 100, 100, "pink");
 
 let wolf = new Wolf (1616, 55, 114, 710, 'grey');
@@ -119,6 +143,12 @@ let ground = new Box(0, 715, 1720, 55, 'brown');
 let platform1 = new Platform(1171, 481, 400, 20, 'blue');
 
 let platform2 = new Platform(1571, 225, 400, 20, 'blue');
+
+let heart1 = new Health(5, 5, 50, 50, 'red');
+
+let heart2 = new Health(60, 5, 50, 50, 'red');
+
+let heart3 = new Health(115, 5, 50, 50, 'red');
 
 // let knives = new Attack(1571, 630, 200, 20, 'darkgrey', 1);
 
@@ -198,10 +228,10 @@ setInterval(() => {
 
 
 function detectHit(attack, entity) {
-    const right = entity.x + entity.width >= attack.x
-    const left = entity.x <= attack.x + attack.width
-    const top = entity.y + entity.height >= attack.y
-    const bottom = entity.y <= attack.y + attack.height
+    const right = entity.x + entity.width + entity.velocity.x >= attack.x
+    const left = entity.x + entity.velocity.x <= attack.x + attack.width
+    const top = entity.y + entity.height + entity.velocity.y >= attack.y
+    const bottom = entity.y + entity.velocity.y <= attack.y + attack.height
     return (right && left && top && bottom)
 }
 
@@ -229,6 +259,13 @@ function gameRefresh() {
 
     ground.render();
 
+    heart1.render();
+    heart1.hit()
+    heart2.render();
+    heart2.hit();
+    
+    heart3.render();
+    heart3.hit();
     
 
     piggy.update();
@@ -301,7 +338,8 @@ function gameRefresh() {
 
     
     if(piggy.health == 0) {
-        clearInterval(refresh, 0);
+        heart3.color = 'darkgrey';
+        clearInterval(refresh, 5000);
     }
 
     
