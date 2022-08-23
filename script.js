@@ -17,10 +17,10 @@ canvas.setAttribute('width', getComputedStyle(canvas)['width'])
 
 
 // adds a function that will drawboxes upon variable input
-function drawBox(x, y, width, height, color) {
-    ctx.fillStyle = color;
-    ctx.fillRect(x, y, width, height)
-}
+// function drawBox(x, y, width, height, color) {
+//     ctx.fillStyle = color;
+//     ctx.fillRect(x, y, width, height)
+// }
 
 let gravity = .12;
 
@@ -157,8 +157,8 @@ let piggy = new Player(100, 100, 100, 100, "pink");
 let wolf = new Wolf (1616, 55, 114, 710, 'grey');
 let wolfWall = new Box(1570, 0, 1, 770, 'white');
 let ground = new Box(0, 715, 1720, 55, 'brown');
-let platform1 = new Platform(1171, 481, 400, 20, 'blue');
-let platform2 = new Platform(1571, 225, 400, 20, 'blue');
+// let platform1 = new Platform(1171, 481, 400, 20, 'blue');
+// let platform2 = new Platform(1571, 225, 400, 20, 'blue');
 let heart1 = new Health(5, 5, 50, 50, 'red');
 let heart2 = new Health(60, 5, 50, 50, 'red');
 let heart3 = new Health(115, 5, 50, 50, 'red');
@@ -169,6 +169,8 @@ let platformArr = [];
 let bullets = [];
 let knivesArr = [];
 let forksArr = [];
+let gameState = false;
+
 
 // testing init function
 function init() {
@@ -186,8 +188,8 @@ function init() {
     heart2 = new Health(60, 5, 50, 50, 'red');
     heart3 = new Health(115, 5, 50, 50, 'red');
     // firstArm = new armAttack(1571, 630, 1571, 40, 'black', 1);
+    console.log("test")
 }
-
 
 
 function playerMovement() {
@@ -202,8 +204,8 @@ function playerMovement() {
 
 
 
-
 function spawnEnemies() {
+    
     // Platform Intervals
     setInterval(() => {
         platformArr.push(new Platform(1571, 481, 400, 20, 'blue'))
@@ -212,6 +214,7 @@ function spawnEnemies() {
         platformArr.push(new Platform(1571, 225, 400, 20, 'blue'))
     }, 3500)
 
+    
 
     // Knife Intervals
     setInterval(() => {
@@ -256,9 +259,6 @@ function spawnEnemies() {
         forksArr.push(new Attack(1491, -100, 20, 100, 'darkgrey', 1))
     }, 3500)
 }
-
-
-
 
 
 
@@ -349,20 +349,24 @@ addEventListener('keyup', (e) => {
 })
 
 
-// gameLoop()
 
 
 
-let looping = setInterval(gameLoop, 1)
 
-spawnEnemies()
+// let looping = setInterval(gameLoop, 1)
+
 
 function gameLoop() {
+    if(gameState) {
 
+    
+    requestAnimationFrame(gameLoop)
     // clears the canvas
+    
+    
     ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-
+    
     // renders the items in game
     wolf.render();
     
@@ -377,9 +381,9 @@ function gameLoop() {
     
     heart3.render();
     heart3.hit();
-    
-
     piggy.update();
+
+
 
     playerMovement()
 
@@ -400,9 +404,6 @@ function gameLoop() {
             console.log(wolf.health)
         }
     }
-
-
-    
 
     for(let j = 0; j < platformArr.length; j++) {
         platformArr[j].render();
@@ -453,27 +454,26 @@ function gameLoop() {
         
     }
 
-    firstArm.movement()
+    // firstArm.movement()
 
     if(piggy.health == -1) {
         gameHeader.innerText = 'You Lose';
-        clearInterval(looping, 0)
+        gameState = false;
+        // clearInterval(gameLoop(), 0)
     }
 
     
     if(wolf.health == 0) {
         gameHeader.innerText = 'You Win!';
-        clearInterval(looping, 0);
+        // clearInterval(gameLoop(), 0);
     }
-    
-    // requestAnimationFrame(gameLoop)
+}
 }
 
+spawnEnemies()
+
 canvas.addEventListener('click', () => {
-    // console.log(e.offsetX, e.offsetY)
-    init()
-    // gameLoop()
-    spawnEnemies()
+    console.log(e.offsetX, e.offsetY)
     
 })
 
@@ -481,7 +481,16 @@ canvas.addEventListener('click', () => {
 
 
 
-playAgain.addEventListener('click', (e) => {
-    location.reload()
+
+
+playAgain.addEventListener('click', () => {
+    if(gameState == false) {
+        init()
+        gameState = true;
+        gameLoop()
+        
+        
+        console.log(gameLoop)
+    }
 })
 
