@@ -24,7 +24,7 @@ Play as the untold piggy from the Three Little Piggy story to fight the Big Bad 
 * Render platforms that character can jump on
 * Render character bullets (squares/rectangles with hitboxes)
 * Render enemy bullets, long attack, wave attack, and rain attack items/hitboxes (squares/rectangles with hitboxes)
-* Generate three hearts for the player and healthbar for the enemy
+* Generate three hearts for the player and healthpoint system for the enemy
 * Loss state when player loses hearts
 * Win state when player beats the boss
 * Create invisible wall for boss so that player cannot go behind boss to cheese him
