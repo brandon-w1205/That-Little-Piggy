@@ -56,3 +56,16 @@ main {
     background-color: blue;
     color: white;
 }
+
+.Loss, .Won {
+    display: grid;
+    text-align: center;
+    position: absolute;
+    background-color: aqua;
+    color:black;
+    left: 0;
+    right: 0;
+    width: 600;
+    height: 600;
+    margin: 300px 500px 500px 500px;
+}

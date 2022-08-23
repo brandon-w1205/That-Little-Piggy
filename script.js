@@ -472,7 +472,7 @@ function gameLoop() {
 
 spawnEnemies()
 
-canvas.addEventListener('click', () => {
+canvas.addEventListener('click', (e) => {
     console.log(e.offsetX, e.offsetY)
     
 })
