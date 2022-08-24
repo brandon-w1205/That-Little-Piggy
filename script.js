@@ -42,13 +42,13 @@ class Player extends Box {
         this.health = 3;
         this.iFrames = false;
         this.iKillFrames = false;
-        // this.alive = true;
         this.velocity = {
             x: 0,
             y: 0
         }
         this.onPlatform = true;
         this.inDash = false;
+        this.
     }
 
     update() {
@@ -162,13 +162,25 @@ function init() {
 
 // Add dash mechanic for left side
 function playerMovement() {
+
     if(keys.right.press && keys.kChar.press && piggy.x < 1465 && piggy.inDash == false) {
-        piggy.iFrames = true;
         piggy.velocity.x = 50;
-        
-        
-        console.log("test")
-        if(piggy.velocity.x > 4 || piggy.velocity.x < -4) {
+        if(piggy.velocity.x > 4) {
+            
+            // Sets dash ending time
+            setTimeout(() => {
+                piggy.inDash = true;
+            }, 40)
+
+            // Sets time where you cannot dash again
+            setTimeout(() => {
+                piggy.inDash = false;
+            }, 1000)
+        }
+    } else if(keys.left.press && keys.kChar.press && piggy.x > 0 && piggy.inDash == false) {
+        piggy.velocity.x = -50;
+       
+        if(piggy.velocity.x < -4) {
             
             setTimeout(() => {
                 piggy.inDash = true;
@@ -176,12 +188,8 @@ function playerMovement() {
 
             setTimeout(() => {
                 piggy.inDash = false;
-            }, 800)
-            
+            }, 1000)
         }
-        // setTimeout(() => {
-        //     piggy.inDash = false;
-        // }, 2000)
     } else if(keys.right.press && piggy.x < 1465) {
         piggy.velocity.x = 4;
         console.log(piggy.velocity.x)
@@ -253,17 +261,17 @@ function spawnEnemies() {
     // Wolf Arms Intervals
     setInterval(() => {
         // bottom arm
-        armsArr.push(new Attack(1571, 550, 1571, 136, 'grey', 1));
+        armsArr.push(new Attack(1571, 550, 1300, 136, 'grey', 1));
     }, 8654)
 
     setInterval(() => {
         // middle arm
-        armsArr.push(new Attack(1571, 300, 1571, 136, 'grey', 1));
+        armsArr.push(new Attack(1571, 300, 1300, 136, 'grey', 1));
     }, 11846)
 
     setInterval(() => {
         // top arm
-        armsArr.push(new Attack(1571, 40, 1571, 136, 'grey', 1));
+        armsArr.push(new Attack(1571, 40, 1300, 136, 'grey', 1));
     }, 13392)
 
 
