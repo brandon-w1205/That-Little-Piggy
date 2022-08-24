@@ -54,7 +54,6 @@ class Player extends Box {
     update() {
         this.render()
         this.velocity.y != 0 ? this.onPlatform = false : this.onPlatform = true;
-        this.velocity.x < -3 ? this.inDash = true : this.inDash = false;
         this.y += this.velocity.y;
         this.x += this.velocity.x;
 
@@ -84,10 +83,6 @@ class Platform extends Box {
             y: 0
         }
     }
-
-    // move() {
-    //     this.x -= 1;
-    // }
 }
 
 class Attack extends Box {
@@ -163,13 +158,33 @@ function init() {
     heart1 = new Health(5, 5, 50, 50, 'red');
     heart2 = new Health(60, 5, 50, 50, 'red');
     heart3 = new Health(115, 5, 50, 50, 'red');
-    console.log("test")
 }
 
-
+// Add dash mechanic for left side
 function playerMovement() {
-    if(keys.right.press && piggy.x < 1465) {
+    if(keys.right.press && keys.kChar.press && piggy.x < 1465 && piggy.inDash == false) {
+        piggy.iFrames = true;
+        piggy.velocity.x = 50;
+        
+        
+        console.log("test")
+        if(piggy.velocity.x > 4 || piggy.velocity.x < -4) {
+            
+            setTimeout(() => {
+                piggy.inDash = true;
+            }, 40)
+
+            setTimeout(() => {
+                piggy.inDash = false;
+            }, 800)
+            
+        }
+        // setTimeout(() => {
+        //     piggy.inDash = false;
+        // }, 2000)
+    } else if(keys.right.press && piggy.x < 1465) {
         piggy.velocity.x = 4;
+        console.log(piggy.velocity.x)
     } else if (keys.left.press && piggy.x > 0) {
         piggy.velocity.x = -4;
     } else {
@@ -306,6 +321,9 @@ addEventListener('keydown', (e) => {
         case('a'):
             keys.left.press = true;
             break;
+        case('k'):
+            keys.kChar.press = true;
+            break;
         case(' '):
             if(piggy.onPlatform) {
                 piggy.velocity.y = -9;
@@ -318,9 +336,7 @@ addEventListener('keydown', (e) => {
         case('j'):
             keys.jChar.press = true;
             break;
-        case('k'):
-            keys.kChar.press = true;
-            break;
+        
     }
 })
 
@@ -378,9 +394,11 @@ function gameLoop() {
         heart3.hit();
         piggy.update();
 
-
+        
 
         playerMovement()
+
+        
 
         if(keys.jChar.press) {
             bullets.push(new Attack(piggy.x + piggy.width, piggy.y, 10, 10, 'red', 1))
@@ -483,7 +501,7 @@ function gameLoop() {
         }
 
         piggy.iKillFrames = false;
-
+        
 
         if(piggy.health <= -1) {
             gameHeader.innerText = 'You Lose';
