@@ -18,8 +18,11 @@ console.log(imagePigLeft.src)
 var imagePigRight = new Image();
 imagePigRight.src = '../img/Angry Pig Idle Spritesheet Right.png'
 
-imagePigRight.width = imagePigRight.width*2;
-imagePigRight.height = imagePigRight.height*2;
+var pigWalkingLeft = new Image();
+pigWalkingLeft.src = '../img/Angry Pig Walking Spritesheet.png'
+
+var pigWalkingRight = new Image();
+pigWalkingRight.src = '../img/Angry Pig Walking Spritesheet Right.png'
 
 // From Franks Laboratory Sprite Animation
 function drawSprite(img, sX, sY, sW, sH, dX, dY, dW, dH) {
@@ -210,12 +213,16 @@ function playerMovement() {
     } else if(keys.right.press && piggy.x < 1465) {
         piggy.velocity.x = 4;
         // Change with walking right animation
-        // drawSprite(imagePigRight, 0, 0, 32, 32, piggy.x-20, piggy.y-60, piggy.width+60, piggy.height+60)
+        drawSprite(pigWalkingRight, piggy.frameX*32, 0, 32, 32, piggy.x-20, piggy.y-60, piggy.width+60, piggy.height+60)
+        piggy.facingLeft = false;
+        piggy.facingRight = false;
         console.log(piggy.velocity.x)
     } else if (keys.left.press && piggy.x > 0) {
         piggy.velocity.x = -4;
         // Change with walking left animation
-        // drawSprite(imagePigLeft, 0, 0, 32, 32, piggy.x-20, piggy.y-60, piggy.width+60, piggy.height+60)
+        drawSprite(pigWalkingLeft, piggy.frameX*32, 0, 32, 32, piggy.x-20, piggy.y-60, piggy.width+60, piggy.height+60)
+        piggy.facingRight = false;
+        piggy.facingLeft = false;
     } else {
         piggy.velocity.x = 0;
     }
@@ -373,9 +380,12 @@ addEventListener('keyup', (e) => {
     switch(e.key) {
         case('d'):
             keys.right.press = false;
+            piggy.facingRight = true;
             break;
         case('a'):
             keys.left.press = false;
+            piggy.facingLeft = true;
+            piggy.facingRight = false;
             break;
         case('j'):
             keys.jChar.press = false;
@@ -397,9 +407,9 @@ beginning.style.display = 'grid';
 let instructions = document.querySelector("#instructions");
 
 // Saving for animation frames later
-// setInterval(() => {
-//     piggy.frameX++
-// }, 200)
+setInterval(() => {
+    piggy.frameX++
+}, 100)
 
 function gameLoop() {
     if(gameState) {
@@ -430,7 +440,11 @@ function gameLoop() {
 
 
         
-        
+        if(piggy.facingRight) {
+            drawSprite(imagePigRight, 0, 0, 32, 32, piggy.x-20, piggy.y-60, piggy.width+60, piggy.height+60)
+        } else if (piggy.facingLeft) {
+            drawSprite(imagePigLeft, 0, 0, 32, 32, piggy.x-20, piggy.y-60, piggy.width+60, piggy.height+60)
+        }
         
         
 
