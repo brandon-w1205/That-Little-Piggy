@@ -8,13 +8,23 @@ const ctx = canvas.getContext('2d');
 canvas.setAttribute('height', getComputedStyle(canvas)['height'])
 canvas.setAttribute('width', getComputedStyle(canvas)['width'])
 
+// taken from Game Tutorial video
 
 
-// adds a function that will drawboxes upon variable input
-// function drawBox(x, y, width, height, color) {
-//     ctx.fillStyle = color;
-//     ctx.fillRect(x, y, width, height)
-// }
+var imagePigLeft = new Image();
+imagePigLeft.src = '../img/Angry Pig Idle Spritesheet.png'
+console.log(imagePigLeft.src)
+
+var imagePigRight = new Image();
+imagePigRight.src = '../img/Angry Pig Idle Spritesheet Right.png'
+
+imagePigRight.width = imagePigRight.width*2;
+imagePigRight.height = imagePigRight.height*2;
+
+// From Franks Laboratory Sprite Animation
+function drawSprite(img, sX, sY, sW, sH, dX, dY, dW, dH) {
+    ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
+}
 
 let gravity = .15;
 
@@ -48,11 +58,16 @@ class Player extends Box {
         }
         this.onPlatform = true;
         this.inDash = false;
-        this.
+        this.frameX = 0;
+        this.facingRight = true;
+        this.facingLeft = false;
     }
 
     update() {
         this.render()
+        if(this.frameX > 4) {
+            this.frameX = 0
+        }
         this.velocity.y != 0 ? this.onPlatform = false : this.onPlatform = true;
         this.y += this.velocity.y;
         this.x += this.velocity.x;
@@ -74,6 +89,8 @@ class Player extends Box {
         
     }
 }
+
+
 
 class Platform extends Box {
     constructor(x, y, width, height, color) {
@@ -192,9 +209,13 @@ function playerMovement() {
         }
     } else if(keys.right.press && piggy.x < 1465) {
         piggy.velocity.x = 4;
+        // Change with walking right animation
+        // drawSprite(imagePigRight, 0, 0, 32, 32, piggy.x-20, piggy.y-60, piggy.width+60, piggy.height+60)
         console.log(piggy.velocity.x)
     } else if (keys.left.press && piggy.x > 0) {
         piggy.velocity.x = -4;
+        // Change with walking left animation
+        // drawSprite(imagePigLeft, 0, 0, 32, 32, piggy.x-20, piggy.y-60, piggy.width+60, piggy.height+60)
     } else {
         piggy.velocity.x = 0;
     }
@@ -375,7 +396,10 @@ beginning.style.display = 'grid';
 
 let instructions = document.querySelector("#instructions");
 
-
+// Saving for animation frames later
+// setInterval(() => {
+//     piggy.frameX++
+// }, 200)
 
 function gameLoop() {
     if(gameState) {
@@ -384,7 +408,7 @@ function gameLoop() {
         
         
         ctx.clearRect(0, 0, canvas.width, canvas.height)
-
+        
         
         // renders the items in game
         wolf.render();
@@ -400,8 +424,18 @@ function gameLoop() {
         
         heart3.render();
         heart3.hit();
+
+        
         piggy.update();
 
+
+        
+        
+        
+        
+
+        
+        
         
 
         playerMovement()
@@ -452,7 +486,8 @@ function gameLoop() {
                 if(detectHit(knivesArr[k], piggy) === true && piggy.iFrames == false) {
                     piggy.health -= knivesArr[k].attackPoints
                     piggy.iFrames = true;
-                    piggy.color = 'white';
+                    piggy.color = 'rgb(0, 0, 0, 0)';
+                    imagePigRight.style.opacity = '0'
                     setTimeout (() => {
                         piggy.iFrames = false;
                         piggy.color = 'pink';
@@ -524,8 +559,8 @@ function gameLoop() {
             gameState = false;
         }
     }
+    
 }
-
 
 
 
