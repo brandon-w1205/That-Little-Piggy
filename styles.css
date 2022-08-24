@@ -56,9 +56,10 @@ main {
     background-color: blue;
     color: white;
     user-select: none;
+    
 }
 
-.Loss, .Won, .Prompt {
+.Loss, .Won, .Prompt, .readMe {
     display: grid;
     text-align: center;
     position: absolute;
@@ -71,4 +72,5 @@ main {
     margin: 300px 500px 500px 500px;
     display: none;
     user-select: none;
+    border-radius: 5px;
 }
