@@ -11,18 +11,21 @@ canvas.setAttribute('width', getComputedStyle(canvas)['width'])
 // taken from Game Tutorial video
 
 
-var imagePigLeft = new Image();
+let imagePigLeft = new Image();
 imagePigLeft.src = '../img/Angry Pig Idle Spritesheet.png'
 console.log(imagePigLeft.src)
 
-var imagePigRight = new Image();
+let imagePigRight = new Image();
 imagePigRight.src = '../img/Angry Pig Idle Spritesheet Right.png'
 
-var pigWalkingLeft = new Image();
+let pigWalkingLeft = new Image();
 pigWalkingLeft.src = '../img/Angry Pig Walking Spritesheet.png'
 
-var pigWalkingRight = new Image();
+let pigWalkingRight = new Image();
 pigWalkingRight.src = '../img/Angry Pig Walking Spritesheet Right.png'
+
+let fireballRight = new Image();
+fireballRight.src = '../img/fireballMoving.png'
 
 // From Franks Laboratory Sprite Animation
 function drawSprite(img, sX, sY, sW, sH, dX, dY, dW, dH) {
@@ -411,6 +414,8 @@ setInterval(() => {
     piggy.frameX++
 }, 100)
 
+
+
 function gameLoop() {
     if(gameState) {
         requestAnimationFrame(gameLoop)
@@ -449,21 +454,19 @@ function gameLoop() {
         
 
         
-        
-        
 
         playerMovement()
 
         
 
         if(keys.jChar.press) {
-            bullets.push(new Attack(piggy.x + piggy.width, piggy.y, 10, 10, 'red', 1))
+            bullets.push(new Attack(piggy.x + piggy.width, piggy.y + 40, 20, 20, 'rgb(0, 0, 0, 0)', 1))
         }
 
         for(let i = 0; i < bullets.length; i += 50)  {
             bullets[i].render();
-            bullets[i].x += 3; 
-            
+            bullets[i].x += 3;
+            drawSprite(fireballRight, 0, 0, 320, 320, bullets[i].x-5, bullets[i].y-30, bullets[i].width+50, bullets[i].height+50)
             if(wolfHitDetect(bullets[i], wolf) === true && wolf.iFrames == false) {
                 wolf.health -= bullets[i].attackPoints
                 wolf.iFrames = true;
