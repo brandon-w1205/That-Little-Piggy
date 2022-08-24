@@ -291,6 +291,9 @@ let keys = {
     },
     jChar: {
         press: false
+    },
+    kChar: {
+        press: false
     }
 }
 
@@ -315,18 +318,9 @@ addEventListener('keydown', (e) => {
         case('j'):
             keys.jChar.press = true;
             break;
-        // case('c'):
-        //     if(piggy.inDash) {
-        //         null
-        //     } else {
-        //         setInterval(() => {
-        //             keys.shift.press = true
-        //         }, 5)
-        //         if (keys.left.press && keys.shift.press && piggy.x > 0) {
-        //             piggy.velocity.x = -12;
-        //         }
-        //     break;
-        //     }
+        case('k'):
+            keys.kChar.press = true;
+            break;
     }
 })
 
@@ -341,8 +335,9 @@ addEventListener('keyup', (e) => {
         case('j'):
             keys.jChar.press = false;
             break;
-        // case('c'):
-        //     keys.shift.press = false;
+        case('k'):
+            keys.kChar.press = false;
+            break;
     }
 })
 
@@ -421,7 +416,7 @@ function gameLoop() {
             
         }
        
-        piggy.iKillFrames = false;
+        
         
 
         if(wolf.health >= 51) {
@@ -487,6 +482,8 @@ function gameLoop() {
             }
         }
 
+        piggy.iKillFrames = false;
+
 
         if(piggy.health <= -1) {
             gameHeader.innerText = 'You Lose';
@@ -515,11 +512,6 @@ canvas.addEventListener('click', (e) => {
     console.log(e.offsetX, e.offsetY)
     
 })
-
-
-
-
-
 
 
 playAgain.addEventListener('click', () => {
