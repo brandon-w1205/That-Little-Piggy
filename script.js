@@ -405,6 +405,9 @@ function gameLoop() {
             }
         }
 
+
+        
+
         for(let j = 0; j < platformArr.length; j++) {
             platformArr[j].render();
             platformArr[j].x -= 2.3;
@@ -413,11 +416,12 @@ function gameLoop() {
                 piggy.velocity.y = 0;
             }
             if(piggy.y + piggy.velocity.y > platformArr[j].y + platformArr[j].height && piggy.x + piggy.width - piggy.velocity.x < platformArr[j].x + platformArr[j].width && piggy.x - piggy.velocity.x > platformArr[j].x) {
-                iKillFrames = true;
+                piggy.iKillFrames = true;
             }
             
         }
        
+        piggy.iKillFrames = false;
         
 
         if(wolf.health >= 51) {
@@ -473,18 +477,12 @@ function gameLoop() {
             }
         }
 
-        if(wolf.health <= 99) {
+        if(wolf.health <= 25) {
             for(let n = 0; n < explosionArr.length; n++) {
                     explosionArr[n].render();
                     explosionArr[n].y += 2;
                 if(detectHit(explosionArr[n], piggy) === true && piggy.iKillFrames == false) {
                     piggy.health -= explosionArr[n].attackPoints;
-                    piggy.iKillFrames = true;
-                    piggy.color = 'white';
-                    setTimeout(() => {
-                        piggy.iKillFrames = false;
-                        piggy.color = 'pink';
-                    }, 3000)
                 }
             }
         }
