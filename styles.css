@@ -76,6 +76,10 @@ main {
     border-radius: 5px;
 }
 
+.Prompt {
+    margin-top: 200px;
+}
+
 .readMe {
     margin-top: 290px;
     height: 300px;

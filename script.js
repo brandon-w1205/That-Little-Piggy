@@ -427,6 +427,7 @@ let readMe = document.querySelector(".readMe");
 
 let beginning = document.querySelector(".Prompt");
 let instructions = document.querySelector("#instructions");
+readMe.style.display = 'grid';
 beginning.style.display = 'grid';
 
 
