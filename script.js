@@ -42,6 +42,9 @@ knifeImage.src = '../img/knife.png'
 let forkImage = new Image();
 forkImage.src = '../img/fork.png'
 
+let wolfLegImage = new Image();
+wolfLegImage.src = '../img/wolfLeg.png'
+
 // From Franks Laboratory Sprite Animation
 function drawSprite(img, sX, sY, sW, sH, dX, dY, dW, dH) {
     ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
@@ -235,7 +238,6 @@ function playerMovement() {
         drawSprite(pigWalkingRight, piggy.frameX*32, 0, 32, 32, piggy.x-20, piggy.y-60, piggy.width+60, piggy.height+60)
         piggy.facingLeft = false;
         piggy.facingRight = false;
-        console.log(piggy.velocity.x)
     } else if (keys.left.press && piggy.x > 0) {
         piggy.velocity.x = -4;
         // Change with walking left animation
@@ -308,17 +310,17 @@ function spawnEnemies() {
     // Wolf Arms Intervals
     setInterval(() => {
         // bottom arm
-        armsArr.push(new Attack(1571, 550, 1300, 136, 'grey', 1));
+        armsArr.push(new Attack(1571, 600, 1000, 100, 'rgb(0, 0, 0, 0)', 1));
     }, 8654)
 
     setInterval(() => {
         // middle arm
-        armsArr.push(new Attack(1571, 300, 1300, 136, 'grey', 1));
+        armsArr.push(new Attack(1571, 350, 1000, 100, 'rgb(0, 0, 0, 0)', 1));
     }, 11846)
 
     setInterval(() => {
         // top arm
-        armsArr.push(new Attack(1571, 40, 1300, 136, 'grey', 1));
+        armsArr.push(new Attack(1571, 90, 1000, 100, 'rgb(0, 0, 0, 0)', 1));
     }, 13392)
 
 
@@ -533,7 +535,6 @@ function gameLoop() {
                 if(detectHit(knivesArr[k], piggy) === true && piggy.iFrames == false) {
                     piggy.health -= knivesArr[k].attackPoints
                     piggy.iFrames = true;
-                    // imagePigRight.style.opacity = '0'
                     setTimeout (() => {
                         piggy.iFrames = false;
                     }, 3000)
@@ -561,14 +562,14 @@ function gameLoop() {
 
         
 
-        if(wolf.health <= 50) {
+        if(wolf.health >= 50) {
             for(let m = 0; m < armsArr.length; m++) {
                     armsArr[m].render();
                     armsArr[m].x -= 6;
+                    ctx.drawImage(wolfLegImage, 0, 0, 232, 220, armsArr[m].x-50, armsArr[m].y-190, armsArr[m].width+60, armsArr[m].height+350)
                 if(detectHit(armsArr[m], piggy) === true && piggy.iFrames == false) {
                     piggy.health -= armsArr[m].attackPoints;
                     piggy.iFrames = true;
-                    piggy.color = 'white';
                     setTimeout(() => {
                         piggy.iFrames = false;
                     }, 3000)
@@ -627,7 +628,6 @@ playAgain.addEventListener('click', () => {
         winner.style.display = 'none'
         beginning.style.display = 'none'
         readMe.style.display = 'none'
-        console.log(gameLoop)
     }
 })
 
