@@ -1,5 +1,19 @@
+// Gravity and velocity calculations inspired from Chris Courses Youtube channel at https://www.youtube.com/watch?v=4q2vvZn5aoo
+// Character sprite and frame animation calculations inspired from Frank's Laboratory Youtube channel at https://www.youtube.com/watch?v=EYf_JwzwTlQ
+
+
 // selects canvas box
 const canvas = document.querySelector('canvas');
+// query selectors for html properties
+const loser = document.querySelector(".Loss");
+const winner = document.querySelector(".Won");
+const readMe = document.querySelector(".readMe");
+const beginning = document.querySelector(".Prompt");
+const instructions = document.querySelector("#instructions");
+
+// Sets Read Me and Prompt to be displayed on page load
+readMe.style.display = 'grid';
+beginning.style.display = 'grid';
 
 // sets context for canvas
 const ctx = canvas.getContext('2d');
@@ -8,9 +22,7 @@ const ctx = canvas.getContext('2d');
 canvas.setAttribute('height', getComputedStyle(canvas)['height'])
 canvas.setAttribute('width', getComputedStyle(canvas)['width'])
 
-
 // Defining images
-// Inspired by Frank's Laboratory at https://www.youtube.com/watch?v=EYf_JwzwTlQ
 const imagePigLeft = new Image();
 imagePigLeft.src = './img/Angry Pig Idle Spritesheet.png'
 
@@ -47,9 +59,6 @@ wolfLegImage.src = './img/wolfLeg.png'
 const fire1Image = new Image();
 fire1Image.src = './img/fire1.png'
 
-// From Franks Laboratory Sprite Animation at https://www.youtube.com/watch?v=EYf_JwzwTlQ
-// ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
-
 // Defines gravity weight factor
 const gravity = .15;
 
@@ -69,7 +78,6 @@ class Box {
         ctx.fillRect(this.x, this.y, this.width, this.height);
     }
 }
-
 
 // Player class that extends Box to add health, invincibility frames, instant kill frames, and sprite animation booleans
 class Player extends Box {
@@ -125,7 +133,6 @@ class Player extends Box {
     }
 }
 
-
 // class created for Platforms to help differentiate classes
 class Platform extends Box {
     constructor(x, y, width, height, color) {
@@ -157,6 +164,7 @@ class Health extends Box {
         super(x, y, width, height, color)
     }
 
+    // hit indication for Player
     hit() {
         if(piggy.health === 3) {
             heart1.color = 'red';
@@ -176,8 +184,7 @@ class Health extends Box {
     }
 }
 
-
-
+// Initial naming of variables from classes
 let piggy = new Player(100, 614, 100, 100, "rgb(0, 0, 0, 0)");
 let wolf = new Wolf (1616, 55, 114, 710, 'rgb(0, 0, 0, 0)');
 let wolfWall = new Box(1570, 0, 1, 770, 'rgb(0, 0, 0, 0)');
@@ -193,7 +200,6 @@ let forksArr = [];
 let armsArr = [];
 let explosionArr = [];
 let gameState = false;
-
 
 // testing init function
 function init() {
@@ -215,8 +221,10 @@ function init() {
 // Add dash mechanic for left side
 function playerMovement() {
 
+    // Key if statements to change velocity and direction
     if(keys.right.press && keys.kChar.press && piggy.x < 1465 && piggy.inDash == false) {
         piggy.velocity.x = 50;
+
         if(piggy.velocity.x > 4) {
             
             // Sets dash ending time
@@ -259,8 +267,7 @@ function playerMovement() {
     }
 }
 
-
-
+// Spawning platforms and enemy attack function
 function spawnEnemies() {
     
     // Platform Intervals
@@ -292,27 +299,22 @@ function spawnEnemies() {
 
     // Fork Intervals
     setInterval(() => {
-        // forks
         forksArr.push(new Attack(80, -100, 20, 100, 'rgb(0, 0, 0, 0)', 1))
     }, 2500)
 
     setInterval(() => {
-        // forks
         forksArr.push(new Attack(373, -100, 20, 100, 'rgb(0, 0, 0, 0)', 1))
     }, 3000)
 
     setInterval(() => {
-        // forks
         forksArr.push(new Attack(745, -100, 20, 100, 'rgb(0, 0, 0, 0)', 1))
     }, 4000)
 
     setInterval(() => {
-        // forks
         forksArr.push(new Attack(1118, -100, 20, 100, 'rgb(0, 0, 0, 0)', 1))
     }, 5000)
 
     setInterval(() => {
-        // forks
         forksArr.push(new Attack(1491, -100, 20, 100, 'rgb(0, 0, 0, 0)', 1))
     }, 3500)
 
@@ -334,11 +336,7 @@ function spawnEnemies() {
     }, 5000)
 }
 
-
-
-
-
-
+// Four direction hit detection function for enemy attacks
 function detectHit(attack, entity) {
     const right = entity.x + entity.width - entity.velocity.x >= attack.x
     const left = entity.x - entity.velocity.x <= attack.x + attack.width
@@ -347,15 +345,13 @@ function detectHit(attack, entity) {
     return (right && left && top && bottom)
 }
 
+// Hit detection for hitting the wolf
 function wolfHitDetect(attack, entity) {
     return entity.x >= attack.x && entity.x <= attack.x + attack.width
 }
 
-
-
-
-
-let keys = {
+// Key press false initialization
+const keys = {
     right: {
         press: false
     },
@@ -373,7 +369,7 @@ let keys = {
     }
 }
 
-
+// add event listener to check if a button has been pressed
 addEventListener('keydown', (e) => {
     switch(e.key) {
         case('d'):
@@ -401,6 +397,7 @@ addEventListener('keydown', (e) => {
     }
 })
 
+// add event listener to determine what happens on release of a button
 addEventListener('keyup', (e) => {
     switch(e.key) {
         case('d'):
@@ -421,19 +418,7 @@ addEventListener('keyup', (e) => {
     }
 })
 
-let loser = document.querySelector(".Loss");
-let winner = document.querySelector(".Won");
-let readMe = document.querySelector(".readMe");
-
-let beginning = document.querySelector(".Prompt");
-let instructions = document.querySelector("#instructions");
-readMe.style.display = 'grid';
-beginning.style.display = 'grid';
-
-
-
-
-// Saving for animation frames later
+// Intervals for animation frames
 setInterval(() => {
     piggy.frameX++
 }, 100)
@@ -442,59 +427,62 @@ setInterval(() => {
     wolf.frameX++
 }, 900)
 
-
-
+// Animating function
 function gameLoop() {
     if(gameState) {
         requestAnimationFrame(gameLoop)
+        
         // clears the canvas
-        
-        
         ctx.clearRect(0, 0, canvas.width, canvas.height)
-        ctx.drawImage(backgroundImage, 0, 0) //, 1900, 1108, 0, 0, 1727, 768)
+
+        // draws the background
+        ctx.drawImage(backgroundImage, 0, 0)
         
-        // renders the items in game
+        // renders the wolf
         wolf.render();
 
+        // loops the animation for the wolf
         if(wolf.frameX > 2) {
             wolf.frameX = 0;
         }
         
+        // Draws the image for the wolf
         ctx.drawImage(wolfImage, wolf.frameX*400, 0, 400, 230, wolf.x-700, wolf.y-800, wolf.width+ 1900, wolf.height+ 900)
 
+        // Creates a wall that the player cannot pass
         wolfWall.render();
 
+        // Creates the ground and draws image for the ground
         ground.render();
-
         ctx.drawImage(platform1Image, 0, 0, 1613, 618, ground.x, ground.y-14, ground.width+10, ground.height+14)
 
+        // Sets the lives and hit detection for them
         heart1.render();
         heart1.hit()
         heart2.render();
         heart2.hit();
-        
         heart3.render();
         heart3.hit();
 
-        
+        // Creates Miss Piggy
         piggy.update();
 
-
-        
+        // Draws left or right facing image for Miss Piggy 
         if(piggy.facingRight) {
             ctx.drawImage(imagePigRight, 0, 0, 32, 32, piggy.x-20, piggy.y-60, piggy.width+60, piggy.height+60)
         } else if (piggy.facingLeft) {
             ctx.drawImage(imagePigLeft, 0, 0, 32, 32, piggy.x-20, piggy.y-60, piggy.width+60, piggy.height+60)
         }
         
-
+        // Calls player movement function
         playerMovement()
 
-
+        // pushes bullets into arrow when j has been pressed
         if(keys.jChar.press) {
             bullets.push(new Attack(piggy.x + piggy.width, piggy.y + 40, 20, 20, 'rgb(0, 0, 0, 0)', 1))
         }
 
+        // For loop to push bullets out and contains wolf hit detection
         for(let i = 0; i < bullets.length; i += 50)  {
             bullets[i].render();
             bullets[i].x += 3;
@@ -508,9 +496,7 @@ function gameLoop() {
             }
         }
 
-
-        
-
+        // For loop to push platforms out, determines if player is on a platform if their velocity is 0, and determines if they are under a platform for instant kill attack
         for(let j = 0; j < platformArr.length; j++) {
             platformArr[j].render();
             platformArr[j].x -= 2.3;
@@ -525,9 +511,7 @@ function gameLoop() {
             
         }
        
-        
-        
-
+        // For loop to push wolf knife attack towards player and hit detection
         if(wolf.health >= 51) {
             for(let k = 0; k < knivesArr.length; k++) {
                 knivesArr[k].render()
@@ -543,10 +527,12 @@ function gameLoop() {
             }
         }
 
+        // Refreshes forks array to not have forks all come out at once upon phase activation
         if(wolf.health >= 76 && wolf.health <= 78) {
             forksArr = []
         }
 
+        // For loop to push wolf fork attacks towards player and hit detection
         if(wolf.health <= 75 && wolf.health >= 51) {
             for(let l = 0; l < forksArr.length; l++) {
                 forksArr[l].render();
@@ -562,14 +548,13 @@ function gameLoop() {
             }
         }
 
+        // Refreshes arms array to prevent wolf arms from coming out all at once
         if(wolf.health >= 51 && wolf.health <= 52) {
             armsArr = []
         }
         
-
+        // For loop to push wolf arm attacks towards player and hit detection
         if(wolf.health <= 50) {
-            
-            
             for(let m = 0; m < armsArr.length; m++) {
                     armsArr[m].render();
                     armsArr[m].x -= 6;
@@ -584,6 +569,7 @@ function gameLoop() {
             }
         }
 
+        // Begins final phase of explosion attack
         if(wolf.health <= 25) {
             for(let n = 0; n < explosionArr.length; n++) {
                     explosionArr[n].render();
@@ -595,16 +581,17 @@ function gameLoop() {
             }
         }
 
+        // Repeatedly sets Miss Piggy's instant kill frames to false to prevent instant death after an explosion passes
         piggy.iKillFrames = false;
         
-
+        // Losing conditions
         if(piggy.health <= -1) {
             gameHeader.innerText = 'You Lose';
             loser.style.display = 'grid';
             gameState = false;
         }
 
-        
+        // Win conditions
         if(wolf.health == 0) {
             gameHeader.innerText = 'You Win!';
             winner.style.display = 'grid';
@@ -614,14 +601,14 @@ function gameLoop() {
     
 }
 
+// Calls function to begin platform and attack intervals
 spawnEnemies()
 
 canvas.addEventListener('click', (e) => {
     console.log(e.offsetX, e.offsetY)
-    
 })
 
-
+// Activates a play again button to reinitialize settings upon clicking
 playAgain.addEventListener('click', () => {
     if(gameState == false) {
         init()
@@ -634,7 +621,7 @@ playAgain.addEventListener('click', () => {
     }
 })
 
-
+// Activates instructions manual upon clicking the Instructions button
 instructions.addEventListener('click', () => {
     if(gameState == false) {
         readMe.style.display = 'grid'
