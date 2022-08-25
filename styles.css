@@ -15,13 +15,13 @@ body {
     grid-template-rows: 25px .86fr .05fr;
     grid-template-columns: .25fr .5fr .25fr;
     grid-template-areas: "gameHeader gameHeader gameHeader"
-                        "game game game"
-                        "playAgain playAgain instructions";
+                         "game game game"
+                         "playAgain playAgain instructions";
 }
 
 canvas {
-    width: 100%;
-    height: 100%;
+    width: 1730px;
+    height: 770px;
 }
 
 #gameHeader {
@@ -56,8 +56,9 @@ main {
     background-color: blue;
     color: white;
     user-select: none;
-    
 }
+
+ 
 
 .Loss, .Won, .Prompt, .readMe {
     display: grid;
@@ -73,4 +74,22 @@ main {
     display: none;
     user-select: none;
     border-radius: 5px;
+}
+
+.readMe {
+    margin-top: 290px;
+    height: 300px;
+}
+
+.readMe h2 {
+    margin-top: 5px;
+    margin-bottom: -20px;
+}
+
+.readMe h3 {
+    margin-bottom: -10px;
+}
+
+.readMe #dash{
+    margin-bottom: -10px;
 }

@@ -9,51 +9,51 @@ canvas.setAttribute('height', getComputedStyle(canvas)['height'])
 canvas.setAttribute('width', getComputedStyle(canvas)['width'])
 
 
-// taken from Chris Courses
+// Defining images
 // Inspired by Frank's Laboratory at https://www.youtube.com/watch?v=EYf_JwzwTlQ
 const imagePigLeft = new Image();
-imagePigLeft.src = '../img/Angry Pig Idle Spritesheet.png'
+imagePigLeft.src = './img/Angry Pig Idle Spritesheet.png'
 
 const imagePigRight = new Image();
-imagePigRight.src = '../img/Angry Pig Idle Spritesheet Right.png'
+imagePigRight.src = './img/Angry Pig Idle Spritesheet Right.png'
 
 const pigWalkingLeft = new Image();
-pigWalkingLeft.src = '../img/Angry Pig Walking Spritesheet.png'
+pigWalkingLeft.src = './img/Angry Pig Walking Spritesheet.png'
 
 const pigWalkingRight = new Image();
-pigWalkingRight.src = '../img/Angry Pig Walking Spritesheet Right.png'
+pigWalkingRight.src = './img/Angry Pig Walking Spritesheet Right.png'
 
 const fireballRight = new Image();
-fireballRight.src = '../img/fireballMoving.png'
+fireballRight.src = './img/fireballMoving.png'
 
 const wolfImage = new Image();
-wolfImage.src = '../img/Werewolf.png'
+wolfImage.src = './img/Werewolf.png'
 
 const backgroundImage = new Image();
-backgroundImage.src = '../img/Background.png'
+backgroundImage.src = './img/Background.png'
 
 const platform1Image = new Image();
-platform1Image.src = '../img/Platform1.png'
+platform1Image.src = './img/Platform1.png'
 
 const knifeImage = new Image();
-knifeImage.src = '../img/knife.png'
+knifeImage.src = './img/knife.png'
 
 const forkImage = new Image();
-forkImage.src = '../img/fork.png'
+forkImage.src = './img/fork.png'
 
 const wolfLegImage = new Image();
-wolfLegImage.src = '../img/wolfLeg.png'
+wolfLegImage.src = './img/wolfLeg.png'
 
 const fire1Image = new Image();
-fire1Image.src = '../img/fire1.png'
+fire1Image.src = './img/fire1.png'
 
-// From Franks Laboratory Sprite Animation
+// From Franks Laboratory Sprite Animation at https://www.youtube.com/watch?v=EYf_JwzwTlQ
 // ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
 
-
+// Defines gravity weight factor
 const gravity = .15;
 
-// adds character constructor to create a character's hitbox
+// Box class for creating the basis of platforms and entities
 class Box {
     constructor(x, y, width, height, color) {
         this.x = x;
@@ -63,14 +63,15 @@ class Box {
         this.color = color;
     }
 
+    // Drawing function
     render() {
         ctx.fillStyle = this.color;
         ctx.fillRect(this.x, this.y, this.width, this.height);
     }
-
-    
 }
 
+
+// Player class that extends Box to add health, invincibility frames, instant kill frames, and sprite animation booleans
 class Player extends Box {
     constructor(x, y, width, height, color) {
         super(x, y, width, height, color)
@@ -83,31 +84,40 @@ class Player extends Box {
         }
         this.onPlatform = true;
         this.inDash = false;
+        // start of frame selection
         this.frameX = 0;
         this.facingRight = true;
         this.facingLeft = false;
     }
 
+    // Drawing function with movement functionality
     update() {
         this.render()
+
+        // sets limiting frame for looping walking animation
         if(this.frameX > 4) {
             this.frameX = 0
         }
+
+        // boolean for determining if the character is on a platform to limit their jumps
         this.velocity.y != 0 ? this.onPlatform = false : this.onPlatform = true;
+
+        // adds a velocity/speed factor onto the x and y coordinates
         this.y += this.velocity.y;
         this.x += this.velocity.x;
 
+        // adds the gravity weight when player is in the area and prevents player from floating
         if(this.y + this.height + this.velocity.y <= 715) {
             this.velocity.y += gravity;
         } else {
             this.velocity.y = 0;
         }
 
+        // sets boundary for the player's movement on the screen
         if(this.y <= 0)
         {
             this.y = 0;
         }
-
         if(this.x <= 0) {
             this.velocity.x = 0;
         }
@@ -116,17 +126,14 @@ class Player extends Box {
 }
 
 
-
+// class created for Platforms to help differentiate classes
 class Platform extends Box {
     constructor(x, y, width, height, color) {
         super(x, y, width, height, color)
-        this.spot = {
-            x: 0,
-            y: 0
-        }
     }
 }
 
+// class created for attacks to add healthpoints and differentiate
 class Attack extends Box {
     constructor(x, y, width, height, color, attackPoints) {
         super(x, y, width, height, color)
@@ -134,6 +141,7 @@ class Attack extends Box {
     }
 }
 
+// class created to give the wolf health, invincibility frames, and animation frames
 class Wolf extends Box {
     constructor(x, y, width, height, color) {
         super(x, y, width, height, color)
@@ -143,6 +151,7 @@ class Wolf extends Box {
     }
 }
 
+// class created to give the health a function
 class Health extends Box {
     constructor(x, y, width, height, color) {
         super(x, y, width, height, color)
@@ -295,7 +304,7 @@ function spawnEnemies() {
     setInterval(() => {
         // forks
         forksArr.push(new Attack(745, -100, 20, 100, 'rgb(0, 0, 0, 0)', 1))
-    }, 5500)
+    }, 4000)
 
     setInterval(() => {
         // forks
@@ -312,18 +321,12 @@ function spawnEnemies() {
     setInterval(() => {
         // bottom arm
         armsArr.push(new Attack(1571, 600, 1000, 100, 'rgb(0, 0, 0, 0)', 1));
-    }, 8654)
+    }, 6000)
 
     setInterval(() => {
         // middle arm
         armsArr.push(new Attack(1571, 350, 1000, 100, 'rgb(0, 0, 0, 0)', 1));
-    }, 11846)
-
-    setInterval(() => {
-        // top arm
-        armsArr.push(new Attack(1571, 90, 1000, 100, 'rgb(0, 0, 0, 0)', 1));
-    }, 13392)
-
+    }, 8500)
 
     // Explosion Interval
     setInterval(() => {
@@ -426,6 +429,9 @@ let beginning = document.querySelector(".Prompt");
 let instructions = document.querySelector("#instructions");
 beginning.style.display = 'grid';
 
+
+
+
 // Saving for animation frames later
 setInterval(() => {
     piggy.frameX++
@@ -480,13 +486,9 @@ function gameLoop() {
             ctx.drawImage(imagePigLeft, 0, 0, 32, 32, piggy.x-20, piggy.y-60, piggy.width+60, piggy.height+60)
         }
         
-        
-
-        
 
         playerMovement()
 
-        
 
         if(keys.jChar.press) {
             bullets.push(new Attack(piggy.x + piggy.width, piggy.y + 40, 20, 20, 'rgb(0, 0, 0, 0)', 1))
@@ -540,6 +542,10 @@ function gameLoop() {
             }
         }
 
+        if(wolf.health >= 76 && wolf.health <= 78) {
+            forksArr = []
+        }
+
         if(wolf.health <= 75 && wolf.health >= 51) {
             for(let l = 0; l < forksArr.length; l++) {
                 forksArr[l].render();
@@ -555,10 +561,14 @@ function gameLoop() {
             }
         }
 
-
+        if(wolf.health >= 51 && wolf.health <= 52) {
+            armsArr = []
+        }
         
 
         if(wolf.health <= 50) {
+            
+            
             for(let m = 0; m < armsArr.length; m++) {
                     armsArr[m].render();
                     armsArr[m].x -= 6;
