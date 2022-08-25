@@ -42,3 +42,8 @@ Play as the untold piggy from the Three Little Piggy story to fight the Big Bad 
 * Getting stuck on creating a good window for the game
 * Creating a fluid movement and jumping mechanic (gravity included)
 * Spacing out my time and not procrastinating
+
+## Credits/Sources
+
+* Gravity and velocity calculations inspired from Chris Courses Youtube channel at https://www.youtube.com/watch?v=4q2vvZn5aoo
+* Character sprite and frame animation calculations inspired from Frank's Laboratory Youtube channel at https://www.youtube.com/watch?v=EYf_JwzwTlQ
