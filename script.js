@@ -4,16 +4,19 @@
 
 // selects canvas box
 const canvas = document.querySelector('canvas');
+
 // query selectors for html properties
 const loser = document.querySelector(".Loss");
 const winner = document.querySelector(".Won");
 const readMe = document.querySelector(".readMe");
 const beginning = document.querySelector(".Prompt");
 const instructions = document.querySelector("#instructions");
+const disclaimer = document.querySelector(".disclaimer");
 
 // Sets Read Me and Prompt to be displayed on page load
 readMe.style.display = 'grid';
 beginning.style.display = 'grid';
+disclaimer.style.display = 'grid';
 
 // sets context for canvas
 const ctx = canvas.getContext('2d');
@@ -22,7 +25,7 @@ const ctx = canvas.getContext('2d');
 canvas.setAttribute('height', getComputedStyle(canvas)['height'])
 canvas.setAttribute('width', getComputedStyle(canvas)['width'])
 
-// Defining images
+// defining images
 const imagePigLeft = new Image();
 imagePigLeft.src = './img/Angry Pig Idle Spritesheet.png'
 
