@@ -497,7 +497,7 @@ function gameLoop() {
         for(let i = 0; i < bulletsRight.length; i += 50)  {
                 bulletsRight[i].render();
                 bulletsRight[i].x += 3;
-            ctx.drawImage(fireballRight, 0, 0, 320, 320, bulletsRight[i].x-5, bulletsRight[i].y-30, bulletsRight[i].width+50, bulletsRight[i].height+50)
+                ctx.drawImage(fireballRight, 0, 0, 320, 320, bulletsRight[i].x-5, bulletsRight[i].y-30, bulletsRight[i].width+50, bulletsRight[i].height+50)
             if(wolfHitDetect(bulletsRight[i], wolf) === true && wolf.iFrames == false) {
                 wolf.health -= bulletsRight[i].attackPoints
                 wolf.iFrames = true;
