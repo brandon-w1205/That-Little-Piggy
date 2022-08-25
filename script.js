@@ -278,10 +278,10 @@ function spawnEnemies() {
     // Platform Intervals
     setInterval(() => {
         platformArr.push(new Platform(1571, 481, 400, 20, 'blue'))
-    }, 3000)
+    }, 2500)
     setInterval(() => {
         platformArr.push(new Platform(1571, 225, 400, 20, 'blue'))
-    }, 4500)
+    }, 4000)
 
     
 
@@ -289,7 +289,7 @@ function spawnEnemies() {
     setInterval(() => {
         // knives low
         knivesArr.push(new Attack(1571, 630, 200, 20, 'rgb(0, 0, 0, 0)', 1))
-    }, 3000) // Math.floor(Math.random() * (6000-2000) + 2000))
+    }, 3000) 
 
     setInterval(() => {
         // knives mid
@@ -510,14 +510,14 @@ function gameLoop() {
         // For loop to push left bullets out
         for(let i = 0; i < bulletsLeft.length; i += 50)  {
             bulletsLeft[i].render();
-            bulletsLeft[i].x -= 3;
+            bulletsLeft[i].x -= 4;
             ctx.drawImage(fireballRight, 0, 0, 320, 320, bulletsLeft[i].x-5, bulletsLeft[i].y-30, bulletsLeft[i].width+50, bulletsLeft[i].height+50)
         }
 
         // For loop to push platforms out, determines if player is on a platform if their velocity is 0, and determines if they are under a platform for instant kill attack
         for(let j = 0; j < platformArr.length; j++) {
             platformArr[j].render();
-            platformArr[j].x -= 3;
+            platformArr[j].x -= 2.5;
             ctx.drawImage(platform1Image, 0, 0, 1613, 618, platformArr[j].x+2, platformArr[j].y-13, platformArr[j].width+3, platformArr[j].height+50)
             // platform1 collision detection (remember that the y + height gets added with the velocity which is why the second && statement is required)
             if(piggy.y + piggy.height <= platformArr[j].y && piggy.y + piggy.height + piggy.velocity.y >= platformArr[j].y && piggy.x + piggy.width > platformArr[j].x && piggy.x < platformArr[j].x + platformArr[j].width) {
@@ -533,7 +533,7 @@ function gameLoop() {
         if(wolf.health >= 51) {
             for(let k = 0; k < knivesArr.length; k++) {
                 knivesArr[k].render()
-                knivesArr[k].x -= 3;
+                knivesArr[k].x -= 4;
                 ctx.drawImage(knifeImage, 0, 0, 666, 375, knivesArr[k].x, knivesArr[k].y-34, knivesArr[k].width+7, knivesArr[k].height+80)
                 if(detectHit(knivesArr[k], piggy) === true && piggy.iFrames == false) {
                     piggy.health -= knivesArr[k].attackPoints
@@ -575,7 +575,7 @@ function gameLoop() {
         if(wolf.health <= 50) {
             for(let m = 0; m < armsArr.length; m++) {
                     armsArr[m].render();
-                    armsArr[m].x -= 6;
+                    armsArr[m].x -= 7;
                     ctx.drawImage(wolfLegImage, 0, 0, 232, 220, armsArr[m].x-50, armsArr[m].y-190, armsArr[m].width+60, armsArr[m].height+350)
                 if(detectHit(armsArr[m], piggy) === true && piggy.iFrames == false) {
                     piggy.health -= armsArr[m].attackPoints;
