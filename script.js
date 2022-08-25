@@ -36,6 +36,12 @@ backgroundImage.src = '../img/Background.png'
 let platform1Image = new Image();
 platform1Image.src = '../img/Platform1.png'
 
+let knifeImage = new Image();
+knifeImage.src = '../img/knife.png'
+
+let forkImage = new Image();
+forkImage.src = '../img/fork.png'
+
 // From Franks Laboratory Sprite Animation
 function drawSprite(img, sX, sY, sW, sH, dX, dY, dW, dH) {
     ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
@@ -159,7 +165,7 @@ class Health extends Box {
 
 
 
-let piggy = new Player(100, 614, 100, 100, "pink");
+let piggy = new Player(100, 614, 100, 100, "rgb(0, 0, 0, 0)");
 let wolf = new Wolf (1616, 55, 114, 710, 'grey');
 let wolfWall = new Box(1570, 0, 1, 770, 'rgb(0, 0, 0, 0)');
 let ground = new Box(0, 715, 1720, 55, 'brown');
@@ -184,7 +190,7 @@ function init() {
     forksArr = [];
     armsArr = [];
     explosionArr = [];
-    piggy = new Player(100, 614, 100, 100, "pink");
+    piggy = new Player(100, 614, 100, 100, "rgb(0, 0, 0, 0)");
     wolf = new Wolf (1616, 55, 114, 710, 'grey');
     wolfWall = new Box(1570, 0, 1, 770, 'rgb(0, 0, 0, 0)');
     ground = new Box(0, 715, 1720, 55, 'brown');
@@ -258,44 +264,44 @@ function spawnEnemies() {
     // Knife Intervals
     setInterval(() => {
         // knives low
-        knivesArr.push(new Attack(1571, 630, 200, 20, 'darkgrey', 1))
+        knivesArr.push(new Attack(1571, 630, 200, 20, 'rgb(0, 0, 0, 0)', 1))
     }, 3000) // Math.floor(Math.random() * (6000-2000) + 2000))
 
     setInterval(() => {
         // knives mid
-        knivesArr.push(new Attack(1571, 400, 200, 20, 'darkgrey', 1))
+        knivesArr.push(new Attack(1571, 400, 200, 20, 'rgb(0, 0, 0, 0)', 1))
     }, 4000)
 
     setInterval(() => {
         // knives top
-        knivesArr.push(new Attack(1571, 150, 200, 20, 'darkgrey', 1))
+        knivesArr.push(new Attack(1571, 150, 200, 20, 'rgb(0, 0, 0, 0)', 1))
     }, 5000)
 
 
     // Fork Intervals
     setInterval(() => {
         // forks
-        forksArr.push(new Attack(80, -100, 20, 100, 'darkgrey', 1))
+        forksArr.push(new Attack(80, -100, 20, 100, 'rgb(0, 0, 0, 0)', 1))
     }, 2500)
 
     setInterval(() => {
         // forks
-        forksArr.push(new Attack(373, -100, 20, 100, 'darkgrey', 1))
+        forksArr.push(new Attack(373, -100, 20, 100, 'rgb(0, 0, 0, 0)', 1))
     }, 3000)
 
     setInterval(() => {
         // forks
-        forksArr.push(new Attack(745, -100, 20, 100, 'darkgrey', 1))
+        forksArr.push(new Attack(745, -100, 20, 100, 'rgb(0, 0, 0, 0)', 1))
     }, 5500)
 
     setInterval(() => {
         // forks
-        forksArr.push(new Attack(1118, -100, 20, 100, 'darkgrey', 1))
+        forksArr.push(new Attack(1118, -100, 20, 100, 'rgb(0, 0, 0, 0)', 1))
     }, 5000)
 
     setInterval(() => {
         // forks
-        forksArr.push(new Attack(1491, -100, 20, 100, 'darkgrey', 1))
+        forksArr.push(new Attack(1491, -100, 20, 100, 'rgb(0, 0, 0, 0)', 1))
     }, 3500)
 
 
@@ -505,7 +511,7 @@ function gameLoop() {
         for(let j = 0; j < platformArr.length; j++) {
             platformArr[j].render();
             platformArr[j].x -= 2.3;
-            ctx.drawImage(platform1Image, 0, 0, 1613, 618, platformArr[j].x+2, platformArr[j].y-13, platformArr[j].width, platformArr[j].height+50)
+            ctx.drawImage(platform1Image, 0, 0, 1613, 618, platformArr[j].x+2, platformArr[j].y-13, platformArr[j].width+3, platformArr[j].height+50)
             // platform1 collision detection (remember that the y + height gets added with the velocity which is why the second && statement is required)
             if(piggy.y + piggy.height <= platformArr[j].y && piggy.y + piggy.height + piggy.velocity.y >= platformArr[j].y && piggy.x + piggy.width > platformArr[j].x && piggy.x < platformArr[j].x + platformArr[j].width) {
                 piggy.velocity.y = 0;
@@ -523,14 +529,13 @@ function gameLoop() {
             for(let k = 0; k < knivesArr.length; k++) {
                 knivesArr[k].render()
                 knivesArr[k].x -= 3;
+                ctx.drawImage(knifeImage, 0, 0, 666, 375, knivesArr[k].x, knivesArr[k].y-34, knivesArr[k].width+7, knivesArr[k].height+80)
                 if(detectHit(knivesArr[k], piggy) === true && piggy.iFrames == false) {
                     piggy.health -= knivesArr[k].attackPoints
                     piggy.iFrames = true;
-                    piggy.color = 'rgb(0, 0, 0, 0)';
-                    imagePigRight.style.opacity = '0'
+                    // imagePigRight.style.opacity = '0'
                     setTimeout (() => {
                         piggy.iFrames = false;
-                        piggy.color = 'pink';
                     }, 3000)
                     console.log(piggy.health)
                 }
@@ -541,13 +546,12 @@ function gameLoop() {
             for(let l = 0; l < forksArr.length; l++) {
                 forksArr[l].render();
                 forksArr[l].y += 2;
+                ctx.drawImage(forkImage, 0, 0, 188, 614, forksArr[l].x-5, forksArr[l].y-10, forksArr[l].width+15, forksArr[l].height+15)
                 if(detectHit(forksArr[l], piggy) === true && piggy.iFrames == false) {
                     piggy.health -= forksArr[l].attackPoints;
                     piggy.iFrames = true;
-                    piggy.color = 'white';
                     setTimeout(() => {
                         piggy.iFrames = false;
-                        piggy.color = 'pink';
                     }, 3000)
                     console.log(piggy.health)
                 }
@@ -567,7 +571,6 @@ function gameLoop() {
                     piggy.color = 'white';
                     setTimeout(() => {
                         piggy.iFrames = false;
-                        piggy.color = 'pink';
                     }, 3000)
                 }
             }
