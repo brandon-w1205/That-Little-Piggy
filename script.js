@@ -82,6 +82,7 @@ class Box {
     }
 }
 
+
 // Player class that extends Box to add health, invincibility frames, instant kill frames, and sprite animation booleans
 class Player extends Box {
     constructor(x, y, width, height, color) {
