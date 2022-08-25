@@ -278,10 +278,10 @@ function spawnEnemies() {
     // Platform Intervals
     setInterval(() => {
         platformArr.push(new Platform(1571, 481, 400, 20, 'blue'))
-    }, 2000)
+    }, 3000)
     setInterval(() => {
         platformArr.push(new Platform(1571, 225, 400, 20, 'blue'))
-    }, 3500)
+    }, 4500)
 
     
 
@@ -517,7 +517,7 @@ function gameLoop() {
         // For loop to push platforms out, determines if player is on a platform if their velocity is 0, and determines if they are under a platform for instant kill attack
         for(let j = 0; j < platformArr.length; j++) {
             platformArr[j].render();
-            platformArr[j].x -= 2.3;
+            platformArr[j].x -= 3;
             ctx.drawImage(platform1Image, 0, 0, 1613, 618, platformArr[j].x+2, platformArr[j].y-13, platformArr[j].width+3, platformArr[j].height+50)
             // platform1 collision detection (remember that the y + height gets added with the velocity which is why the second && statement is required)
             if(piggy.y + piggy.height <= platformArr[j].y && piggy.y + piggy.height + piggy.velocity.y >= platformArr[j].y && piggy.x + piggy.width > platformArr[j].x && piggy.x < platformArr[j].x + platformArr[j].width) {
