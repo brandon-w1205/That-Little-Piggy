@@ -45,6 +45,12 @@ forkImage.src = '../img/fork.png'
 let wolfLegImage = new Image();
 wolfLegImage.src = '../img/wolfLeg.png'
 
+let fire1Image = new Image();
+fire1Image.src = '../img/fire1.png'
+
+let fire2Image = new Image();
+fire2Image.src = '../img/fire2.png'
+
 // From Franks Laboratory Sprite Animation
 function drawSprite(img, sX, sY, sW, sH, dX, dY, dW, dH) {
     ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
@@ -169,7 +175,7 @@ class Health extends Box {
 
 
 let piggy = new Player(100, 614, 100, 100, "rgb(0, 0, 0, 0)");
-let wolf = new Wolf (1616, 55, 114, 710, 'grey');
+let wolf = new Wolf (1616, 55, 114, 710, 'rgb(0, 0, 0, 0)');
 let wolfWall = new Box(1570, 0, 1, 770, 'rgb(0, 0, 0, 0)');
 let ground = new Box(0, 715, 1720, 55, 'brown');
 let heart1 = new Health(5, 5, 50, 50, 'red');
@@ -194,7 +200,7 @@ function init() {
     armsArr = [];
     explosionArr = [];
     piggy = new Player(100, 614, 100, 100, "rgb(0, 0, 0, 0)");
-    wolf = new Wolf (1616, 55, 114, 710, 'grey');
+    wolf = new Wolf (1616, 55, 114, 710, 'rgb(0, 0, 0, 0)');
     wolfWall = new Box(1570, 0, 1, 770, 'rgb(0, 0, 0, 0)');
     ground = new Box(0, 715, 1720, 55, 'brown');
     heart1 = new Health(5, 5, 50, 50, 'red');
@@ -326,7 +332,7 @@ function spawnEnemies() {
 
     // Explosion Interval
     setInterval(() => {
-        explosionArr.push(new Attack(0, -20, 1571, 20, 'orange', 5));
+        explosionArr.push(new Attack(0, -20, 1571, 20, 'rgb(0, 0, 0, 0)', 5));
     }, 5000)
 }
 
@@ -422,10 +428,8 @@ let winner = document.querySelector(".Won");
 let readMe = document.querySelector(".readMe");
 
 let beginning = document.querySelector(".Prompt");
-
-beginning.style.display = 'grid';
-
 let instructions = document.querySelector("#instructions");
+beginning.style.display = 'grid';
 
 // Saving for animation frames later
 setInterval(() => {
@@ -562,7 +566,7 @@ function gameLoop() {
 
         
 
-        if(wolf.health >= 50) {
+        if(wolf.health <= 50) {
             for(let m = 0; m < armsArr.length; m++) {
                     armsArr[m].render();
                     armsArr[m].x -= 6;
@@ -581,6 +585,7 @@ function gameLoop() {
             for(let n = 0; n < explosionArr.length; n++) {
                     explosionArr[n].render();
                     explosionArr[n].y += 2;
+                    ctx.drawImage(fire1Image, 0, 0, 54, 18, explosionArr[n].x, explosionArr[n].y-15, explosionArr[n].width+100, explosionArr[n].height+15)
                 if(detectHit(explosionArr[n], piggy) === true && piggy.iKillFrames == false) {
                     piggy.health -= explosionArr[n].attackPoints;
                 }
@@ -606,12 +611,7 @@ function gameLoop() {
     
 }
 
-
-
 spawnEnemies()
-
-
-
 
 canvas.addEventListener('click', (e) => {
     console.log(e.offsetX, e.offsetY)
@@ -636,5 +636,4 @@ instructions.addEventListener('click', () => {
     if(gameState == false) {
         readMe.style.display = 'grid'
     }
-    
 })
