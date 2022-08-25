@@ -197,7 +197,8 @@ let heart2 = new Health(60, 5, 50, 50, 'red');
 let heart3 = new Health(115, 5, 50, 50, 'red');
 
 let platformArr = [];
-let bullets = [];
+let bulletsRight = [];
+let bulletsLeft = [];
 let knivesArr = [];
 let forksArr = [];
 let armsArr = [];
@@ -207,7 +208,8 @@ let gameState = false;
 // testing init function
 function init() {
     platformArr = [];
-    bullets = [];
+    bulletsRight = [];
+    bulletsLeft = [];
     knivesArr = [];
     forksArr = [];
     armsArr = [];
@@ -482,21 +484,34 @@ function gameLoop() {
 
         // pushes bullets into arrow when j has been pressed
         if(keys.jChar.press) {
-            bullets.push(new Attack(piggy.x + piggy.width, piggy.y + 40, 20, 20, 'rgb(0, 0, 0, 0)', 1))
+            if(piggy.facingRight){
+                bulletsRight.push(new Attack(piggy.x + piggy.width, piggy.y + 40, 20, 20, 'rgb(0, 0, 0, 0)', 1))
+            }
+            if(piggy.facingLeft) {
+                bulletsLeft.push(new Attack(piggy.x, piggy.y + 40, 20, 20, 'rgb(0, 0, 0, 0)', 1))
+            }
+            
         }
 
-        // For loop to push bullets out and contains wolf hit detection
-        for(let i = 0; i < bullets.length; i += 50)  {
-            bullets[i].render();
-            bullets[i].x += 3;
-            ctx.drawImage(fireballRight, 0, 0, 320, 320, bullets[i].x-5, bullets[i].y-30, bullets[i].width+50, bullets[i].height+50)
-            if(wolfHitDetect(bullets[i], wolf) === true && wolf.iFrames == false) {
-                wolf.health -= bullets[i].attackPoints
+        // For loop to push right bullets out and contains wolf hit detection
+        for(let i = 0; i < bulletsRight.length; i += 50)  {
+                bulletsRight[i].render();
+                bulletsRight[i].x += 3;
+            ctx.drawImage(fireballRight, 0, 0, 320, 320, bulletsRight[i].x-5, bulletsRight[i].y-30, bulletsRight[i].width+50, bulletsRight[i].height+50)
+            if(wolfHitDetect(bulletsRight[i], wolf) === true && wolf.iFrames == false) {
+                wolf.health -= bulletsRight[i].attackPoints
                 wolf.iFrames = true;
                 setTimeout (() => {
                     wolf.iFrames = false;
                 }, 200)
             }
+        }
+
+        // For loop to push left bullets out
+        for(let i = 0; i < bulletsLeft.length; i += 50)  {
+            bulletsLeft[i].render();
+            bulletsLeft[i].x -= 3;
+            ctx.drawImage(fireballRight, 0, 0, 320, 320, bulletsLeft[i].x-5, bulletsLeft[i].y-30, bulletsLeft[i].width+50, bulletsLeft[i].height+50)
         }
 
         // For loop to push platforms out, determines if player is on a platform if their velocity is 0, and determines if they are under a platform for instant kill attack
@@ -621,6 +636,7 @@ playAgain.addEventListener('click', () => {
         winner.style.display = 'none'
         beginning.style.display = 'none'
         readMe.style.display = 'none'
+        disclaimer.style.display = 'none'
     }
 })
 

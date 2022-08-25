@@ -5,6 +5,11 @@ body {
     font-weight: bold;
 }
 
+button {
+    font-size: large;
+    font-weight: bold;
+}
+
 #container {
     max-width: 1730px;
     background-color: rgb(45, 45, 45);
