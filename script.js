@@ -482,12 +482,12 @@ function gameLoop() {
         // Calls player movement function
         playerMovement()
 
-        // pushes bullets into arrow when j has been pressed
+        // pushes either left or right bullets into array when j has been pressed
         if(keys.jChar.press) {
-            if(piggy.facingRight){
+            if(piggy.facingRight || keys.right.press){
                 bulletsRight.push(new Attack(piggy.x + piggy.width, piggy.y + 40, 20, 20, 'rgb(0, 0, 0, 0)', 1))
             }
-            if(piggy.facingLeft) {
+            if(piggy.facingLeft || keys.left.press) {
                 bulletsLeft.push(new Attack(piggy.x, piggy.y + 40, 20, 20, 'rgb(0, 0, 0, 0)', 1))
             }
             
