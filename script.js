@@ -8,55 +8,50 @@ const ctx = canvas.getContext('2d');
 canvas.setAttribute('height', getComputedStyle(canvas)['height'])
 canvas.setAttribute('width', getComputedStyle(canvas)['width'])
 
-// taken from Game Tutorial video
 
-
-let imagePigLeft = new Image();
+// taken from Chris Courses
+// Inspired by Frank's Laboratory at https://www.youtube.com/watch?v=EYf_JwzwTlQ
+const imagePigLeft = new Image();
 imagePigLeft.src = '../img/Angry Pig Idle Spritesheet.png'
-console.log(imagePigLeft.src)
 
-let imagePigRight = new Image();
+const imagePigRight = new Image();
 imagePigRight.src = '../img/Angry Pig Idle Spritesheet Right.png'
 
-let pigWalkingLeft = new Image();
+const pigWalkingLeft = new Image();
 pigWalkingLeft.src = '../img/Angry Pig Walking Spritesheet.png'
 
-let pigWalkingRight = new Image();
+const pigWalkingRight = new Image();
 pigWalkingRight.src = '../img/Angry Pig Walking Spritesheet Right.png'
 
-let fireballRight = new Image();
+const fireballRight = new Image();
 fireballRight.src = '../img/fireballMoving.png'
 
-let wolfImage = new Image();
+const wolfImage = new Image();
 wolfImage.src = '../img/Werewolf.png'
 
-let backgroundImage = new Image();
+const backgroundImage = new Image();
 backgroundImage.src = '../img/Background.png'
 
-let platform1Image = new Image();
+const platform1Image = new Image();
 platform1Image.src = '../img/Platform1.png'
 
-let knifeImage = new Image();
+const knifeImage = new Image();
 knifeImage.src = '../img/knife.png'
 
-let forkImage = new Image();
+const forkImage = new Image();
 forkImage.src = '../img/fork.png'
 
-let wolfLegImage = new Image();
+const wolfLegImage = new Image();
 wolfLegImage.src = '../img/wolfLeg.png'
 
-let fire1Image = new Image();
+const fire1Image = new Image();
 fire1Image.src = '../img/fire1.png'
 
-let fire2Image = new Image();
-fire2Image.src = '../img/fire2.png'
-
 // From Franks Laboratory Sprite Animation
-function drawSprite(img, sX, sY, sW, sH, dX, dY, dW, dH) {
-    ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
-}
+// ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
 
-let gravity = .15;
+
+const gravity = .15;
 
 // adds character constructor to create a character's hitbox
 class Box {
@@ -241,13 +236,13 @@ function playerMovement() {
     } else if(keys.right.press && piggy.x < 1465) {
         piggy.velocity.x = 4;
         // Change with walking right animation
-        drawSprite(pigWalkingRight, piggy.frameX*32, 0, 32, 32, piggy.x-20, piggy.y-60, piggy.width+60, piggy.height+60)
+        ctx.drawImage(pigWalkingRight, piggy.frameX*32, 0, 32, 32, piggy.x-20, piggy.y-60, piggy.width+60, piggy.height+60)
         piggy.facingLeft = false;
         piggy.facingRight = false;
     } else if (keys.left.press && piggy.x > 0) {
         piggy.velocity.x = -4;
         // Change with walking left animation
-        drawSprite(pigWalkingLeft, piggy.frameX*32, 0, 32, 32, piggy.x-20, piggy.y-60, piggy.width+60, piggy.height+60)
+        ctx.drawImage(pigWalkingLeft, piggy.frameX*32, 0, 32, 32, piggy.x-20, piggy.y-60, piggy.width+60, piggy.height+60)
         piggy.facingRight = false;
         piggy.facingLeft = false;
     } else {
@@ -458,7 +453,7 @@ function gameLoop() {
             wolf.frameX = 0;
         }
         
-        drawSprite(wolfImage, wolf.frameX*400, 0, 400, 230, wolf.x-700, wolf.y-800, wolf.width+ 1900, wolf.height+ 900)
+        ctx.drawImage(wolfImage, wolf.frameX*400, 0, 400, 230, wolf.x-700, wolf.y-800, wolf.width+ 1900, wolf.height+ 900)
 
         wolfWall.render();
 
@@ -480,9 +475,9 @@ function gameLoop() {
 
         
         if(piggy.facingRight) {
-            drawSprite(imagePigRight, 0, 0, 32, 32, piggy.x-20, piggy.y-60, piggy.width+60, piggy.height+60)
+            ctx.drawImage(imagePigRight, 0, 0, 32, 32, piggy.x-20, piggy.y-60, piggy.width+60, piggy.height+60)
         } else if (piggy.facingLeft) {
-            drawSprite(imagePigLeft, 0, 0, 32, 32, piggy.x-20, piggy.y-60, piggy.width+60, piggy.height+60)
+            ctx.drawImage(imagePigLeft, 0, 0, 32, 32, piggy.x-20, piggy.y-60, piggy.width+60, piggy.height+60)
         }
         
         
@@ -500,14 +495,13 @@ function gameLoop() {
         for(let i = 0; i < bullets.length; i += 50)  {
             bullets[i].render();
             bullets[i].x += 3;
-            drawSprite(fireballRight, 0, 0, 320, 320, bullets[i].x-5, bullets[i].y-30, bullets[i].width+50, bullets[i].height+50)
+            ctx.drawImage(fireballRight, 0, 0, 320, 320, bullets[i].x-5, bullets[i].y-30, bullets[i].width+50, bullets[i].height+50)
             if(wolfHitDetect(bullets[i], wolf) === true && wolf.iFrames == false) {
                 wolf.health -= bullets[i].attackPoints
                 wolf.iFrames = true;
                 setTimeout (() => {
                     wolf.iFrames = false;
                 }, 200)
-                console.log(wolf.health)
             }
         }
 
@@ -542,7 +536,6 @@ function gameLoop() {
                     setTimeout (() => {
                         piggy.iFrames = false;
                     }, 3000)
-                    console.log(piggy.health)
                 }
             }
         }
@@ -558,7 +551,6 @@ function gameLoop() {
                     setTimeout(() => {
                         piggy.iFrames = false;
                     }, 3000)
-                    console.log(piggy.health)
                 }
             }
         }
