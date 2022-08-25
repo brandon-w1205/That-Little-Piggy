@@ -27,6 +27,15 @@ pigWalkingRight.src = '../img/Angry Pig Walking Spritesheet Right.png'
 let fireballRight = new Image();
 fireballRight.src = '../img/fireballMoving.png'
 
+let wolfImage = new Image();
+wolfImage.src = '../img/Werewolf.png'
+
+let backgroundImage = new Image();
+backgroundImage.src = '../img/Background.png'
+
+let platform1Image = new Image();
+platform1Image.src = '../img/Platform1.png'
+
 // From Franks Laboratory Sprite Animation
 function drawSprite(img, sX, sY, sW, sH, dX, dY, dW, dH) {
     ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
@@ -120,6 +129,7 @@ class Wolf extends Box {
         super(x, y, width, height, color)
         this.health = 100;
         this.iFrames = false;
+        this.frameX = 0;
     }
 }
 
@@ -151,7 +161,7 @@ class Health extends Box {
 
 let piggy = new Player(100, 614, 100, 100, "pink");
 let wolf = new Wolf (1616, 55, 114, 710, 'grey');
-let wolfWall = new Box(1570, 0, 1, 770, 'white');
+let wolfWall = new Box(1570, 0, 1, 770, 'rgb(0, 0, 0, 0)');
 let ground = new Box(0, 715, 1720, 55, 'brown');
 let heart1 = new Health(5, 5, 50, 50, 'red');
 let heart2 = new Health(60, 5, 50, 50, 'red');
@@ -176,7 +186,7 @@ function init() {
     explosionArr = [];
     piggy = new Player(100, 614, 100, 100, "pink");
     wolf = new Wolf (1616, 55, 114, 710, 'grey');
-    wolfWall = new Box(1570, 0, 1, 770, 'white');
+    wolfWall = new Box(1570, 0, 1, 770, 'rgb(0, 0, 0, 0)');
     ground = new Box(0, 715, 1720, 55, 'brown');
     heart1 = new Health(5, 5, 50, 50, 'red');
     heart2 = new Health(60, 5, 50, 50, 'red');
@@ -414,6 +424,10 @@ setInterval(() => {
     piggy.frameX++
 }, 100)
 
+setInterval(() => {
+    wolf.frameX++
+}, 900)
+
 
 
 function gameLoop() {
@@ -423,14 +437,22 @@ function gameLoop() {
         
         
         ctx.clearRect(0, 0, canvas.width, canvas.height)
-        
+        ctx.drawImage(backgroundImage, 0, 0) //, 1900, 1108, 0, 0, 1727, 768)
         
         // renders the items in game
         wolf.render();
+
+        if(wolf.frameX > 2) {
+            wolf.frameX = 0;
+        }
         
+        drawSprite(wolfImage, wolf.frameX*400, 0, 400, 230, wolf.x-700, wolf.y-800, wolf.width+ 1900, wolf.height+ 900)
+
         wolfWall.render();
 
         ground.render();
+
+        ctx.drawImage(platform1Image, 0, 0, 1613, 618, ground.x, ground.y-14, ground.width+10, ground.height+14)
 
         heart1.render();
         heart1.hit()
@@ -483,11 +505,12 @@ function gameLoop() {
         for(let j = 0; j < platformArr.length; j++) {
             platformArr[j].render();
             platformArr[j].x -= 2.3;
+            ctx.drawImage(platform1Image, 0, 0, 1613, 618, platformArr[j].x+2, platformArr[j].y-13, platformArr[j].width, platformArr[j].height+50)
             // platform1 collision detection (remember that the y + height gets added with the velocity which is why the second && statement is required)
             if(piggy.y + piggy.height <= platformArr[j].y && piggy.y + piggy.height + piggy.velocity.y >= platformArr[j].y && piggy.x + piggy.width > platformArr[j].x && piggy.x < platformArr[j].x + platformArr[j].width) {
                 piggy.velocity.y = 0;
             }
-            if(piggy.y + piggy.velocity.y > platformArr[j].y + platformArr[j].height && piggy.x + piggy.width - piggy.velocity.x < platformArr[j].x + platformArr[j].width && piggy.x - piggy.velocity.x > platformArr[j].x) {
+            if(piggy.y + piggy.velocity.y > platformArr[j].y + platformArr[j].height && piggy.x + piggy.width - piggy.velocity.x < platformArr[j].x + platformArr[j].width + 20 && piggy.x - piggy.velocity.x > platformArr[j].x - 20 ) {
                 piggy.iKillFrames = true;
             }
             
