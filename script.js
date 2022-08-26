@@ -259,16 +259,8 @@ function playerMovement() {
         }
     } else if(keys.right.press && piggy.x < 1465) {
         piggy.velocity.x = 4;
-        // Change with walking right animation
-        // ctx.drawImage(pigWalkingRight, piggy.frameX*32, 0, 32, 32, piggy.x-20, piggy.y-60, piggy.width+60, piggy.height+60)
-        // piggy.facingLeft = false;
-        // piggy.facingRight = false;
     } else if (keys.left.press && piggy.x > 0) {
         piggy.velocity.x = -4;
-        // Change with walking left animation
-        // ctx.drawImage(pigWalkingLeft, piggy.frameX*32, 0, 32, 32, piggy.x-20, piggy.y-60, piggy.width+60, piggy.height+60)
-        // piggy.facingRight = false;
-        // piggy.facingLeft = false;
     } else {
         piggy.velocity.x = 0;
     }
