@@ -259,15 +259,15 @@ function playerMovement() {
     } else if(keys.right.press && piggy.x < 1465) {
         piggy.velocity.x = 4;
         // Change with walking right animation
-        ctx.drawImage(pigWalkingRight, piggy.frameX*32, 0, 32, 32, piggy.x-20, piggy.y-60, piggy.width+60, piggy.height+60)
-        piggy.facingLeft = false;
-        piggy.facingRight = false;
+        // ctx.drawImage(pigWalkingRight, piggy.frameX*32, 0, 32, 32, piggy.x-20, piggy.y-60, piggy.width+60, piggy.height+60)
+        // piggy.facingLeft = false;
+        // piggy.facingRight = false;
     } else if (keys.left.press && piggy.x > 0) {
         piggy.velocity.x = -4;
         // Change with walking left animation
-        ctx.drawImage(pigWalkingLeft, piggy.frameX*32, 0, 32, 32, piggy.x-20, piggy.y-60, piggy.width+60, piggy.height+60)
-        piggy.facingRight = false;
-        piggy.facingLeft = false;
+        // ctx.drawImage(pigWalkingLeft, piggy.frameX*32, 0, 32, 32, piggy.x-20, piggy.y-60, piggy.width+60, piggy.height+60)
+        // piggy.facingRight = false;
+        // piggy.facingLeft = false;
     } else {
         piggy.velocity.x = 0;
     }
@@ -483,6 +483,17 @@ function gameLoop() {
         // Calls player movement function
         playerMovement()
 
+        // Continues walking animation even if player is at the wall and prevents double framing
+        if(keys.right.press) {
+            ctx.drawImage(pigWalkingRight, piggy.frameX*32, 0, 32, 32, piggy.x-20, piggy.y-60, piggy.width+60, piggy.height+60)
+            piggy.facingLeft = false;
+            piggy.facingRight = false;
+        }
+        if(keys.left.press) {
+            ctx.drawImage(pigWalkingLeft, piggy.frameX*32, 0, 32, 32, piggy.x-20, piggy.y-60, piggy.width+60, piggy.height+60)
+            piggy.facingLeft = false;
+            piggy.facingRight = false;
+        }
         // pushes either left or right bullets into array when j has been pressed
         if(keys.jChar.press) {
             if(piggy.facingRight || keys.right.press){
@@ -605,14 +616,12 @@ function gameLoop() {
         
         // Losing conditions
         if(piggy.health <= -1) {
-            gameHeader.innerText = 'You Lose';
             loser.style.display = 'grid';
             gameState = false;
         }
 
         // Win conditions
         if(wolf.health == 0) {
-            gameHeader.innerText = 'You Win!';
             winner.style.display = 'grid';
             gameState = false;
         }
