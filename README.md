@@ -17,6 +17,8 @@ Play as the untold piggy from the Three Little Piggy story to fight the Big Bad 
 
 ![](https://i.imgur.com/27YEVHC.png)
 
+I created this wireframe to be the foundation of my idea. This game is heavily inspired by the unique gameplay of Cuphead, a popular action-platformer developed by Studio MDHR. As such I made the choice to have a 2D setup with a large enemy on the right and multiple phases that require the player to dodge and attack at the same time. Utilizing Javascript's Canvas and DOM Manipulation, I hope to create a game with button functionality and dynamic gameplay.
+
 ## MVP Checklist
 
 * Render a game window setup
@@ -51,7 +53,7 @@ Within the one week span, I was able to create an action-platformer that include
 
 ## Future Plans as of 08/26/2022
 
-I plan to add sound effects as they are an integral part of game design. Furthermore, I hope to find new techniques for creating AI mechanics so that I can further optimize my code and not rely on interval timings. 
+Initially, I need to lessen the strain of the picture loading times as the game has a current issue of slowing down in certain circumstances.  Also, I plan to add sound effects and more animations as they are an integral part of game design. Furthermore, I hope to find new techniques for creating AI mechanics so that I can further optimize my code and not rely on interval timings. 
 
 ## Credits/Sources
 
