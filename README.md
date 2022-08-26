@@ -45,6 +45,14 @@ Play as the untold piggy from the Three Little Piggy story to fight the Big Bad 
 * Creating a fluid movement and jumping mechanic (gravity included)
 * Spacing out my time and not procrastinating
 
+## Post-Build Notes
+
+Within the one week span, I was able to create an action-platformer that included multiple attack phases and smooth movement dynamics. Specifically, I was not only able to hit the MVP checklist, but I was also able to implement the stretch goals I had set out for myself and more. The process led me to sharpen my time management skills and follow a process of writing code that was not fully optimized, but leaving notes to optimize at a later time. I was able to learn new techniques and algorithms for certain functions and became more comfortable with javascript overall.
+
+## Future Plans as of 08/26/2022
+
+I plan to add sound effects as they are an integral part of game design. Furthermore, I hope to find new techniques for creating AI mechanics so that I can further optimize my code and not rely on interval timings. 
+
 ## Credits/Sources
 
 * Gravity and velocity calculations inspired from Chris Courses Youtube channel at https://www.youtube.com/watch?v=4q2vvZn5aoo
