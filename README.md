@@ -57,5 +57,6 @@ Initially, I need to lessen the strain of the picture loading times as the game 
 
 ## Credits/Sources
 
+* Game idea inspired by Cuphead fromo Studio MDHR. Without their work, this game would not have been created.
 * Gravity and velocity calculations inspired from Chris Courses Youtube channel at https://www.youtube.com/watch?v=4q2vvZn5aoo
 * Character sprite and frame animation calculations inspired from Frank's Laboratory Youtube channel at https://www.youtube.com/watch?v=EYf_JwzwTlQ

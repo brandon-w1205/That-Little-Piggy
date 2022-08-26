@@ -12,6 +12,7 @@ const readMe = document.querySelector(".readMe");
 const beginning = document.querySelector(".Prompt");
 const instructions = document.querySelector("#instructions");
 const disclaimer = document.querySelector(".disclaimer");
+const wHealth = document.querySelector(".wolfHealth")
 
 // Sets Read Me and Prompt to be displayed on page load
 readMe.style.display = 'grid';
@@ -616,6 +617,7 @@ function gameLoop() {
         
         // Losing conditions
         if(piggy.health <= -1) {
+            wHealth.innerText = "The wolf had " + wolf.health + "/100 health left!"
             loser.style.display = 'grid';
             gameState = false;
         }
