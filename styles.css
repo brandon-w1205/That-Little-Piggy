@@ -28,13 +28,14 @@ button {
 }
 
 canvas {
-    width: 1730px;
+    width: 1725px;
     height: 770px;
 }
 
 #gameHeader {
     grid-area: gameHeader;
     padding: 20px;
+    border: 2px solid antiquewhite;
 }
 
 main {
@@ -42,6 +43,7 @@ main {
     margin-bottom: -5px;
     grid-area: game;
     background-color: rgb(0,154,23);
+    border: 2px solid antiquewhite;
     height: 770px;
 }
 
